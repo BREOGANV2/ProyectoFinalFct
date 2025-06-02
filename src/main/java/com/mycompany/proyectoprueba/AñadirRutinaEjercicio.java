@@ -17,6 +17,7 @@ public class AñadirRutinaEjercicio extends javax.swing.JFrame {
      */
     public AñadirRutinaEjercicio() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     /**

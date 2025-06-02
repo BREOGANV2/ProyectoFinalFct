@@ -17,6 +17,7 @@ public class AñadirRutinaEjecuciones extends javax.swing.JFrame {
      */
     public AñadirRutinaEjecuciones() {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     /**

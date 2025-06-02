@@ -30,27 +30,27 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        btn_AñadirUsuario = new javax.swing.JButton();
         userElimination = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         btn_verUsers = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jButton11 = new javax.swing.JButton();
+        btn_AñadirEjercicio = new javax.swing.JButton();
         ejercicioElimination = new javax.swing.JButton();
         jButton13 = new javax.swing.JButton();
         btn_verEjercicios = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jButton15 = new javax.swing.JButton();
+        btn_AñadirRutina = new javax.swing.JButton();
         rutinaElimination = new javax.swing.JButton();
         jButton17 = new javax.swing.JButton();
         btn_verRutinas = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
-        jButton19 = new javax.swing.JButton();
+        btn_RutinaEjercicio = new javax.swing.JButton();
         rutinaEjercicioElimination = new javax.swing.JButton();
         jButton21 = new javax.swing.JButton();
         btn_verRutinaEjercicio = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
-        jButton23 = new javax.swing.JButton();
+        btn_RutinaUsuario = new javax.swing.JButton();
         rutinaUsuarioElimination = new javax.swing.JButton();
         jButton25 = new javax.swing.JButton();
         btn_verRutinaUsuario = new javax.swing.JButton();
@@ -64,12 +64,17 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Usuarios"));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setText("Añadir");
+        btn_AñadirUsuario.setText("Añadir");
+        btn_AñadirUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_AñadirUsuarioActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.25;
-        jPanel1.add(jButton1, gridBagConstraints);
+        jPanel1.add(btn_AñadirUsuario, gridBagConstraints);
 
         userElimination.setText("Eliminar");
         userElimination.addActionListener(new java.awt.event.ActionListener() {
@@ -114,12 +119,17 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Ejercicios"));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
-        jButton11.setText("Añadir");
+        btn_AñadirEjercicio.setText("Añadir");
+        btn_AñadirEjercicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_AñadirEjercicioActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.25;
-        jPanel2.add(jButton11, gridBagConstraints);
+        jPanel2.add(btn_AñadirEjercicio, gridBagConstraints);
 
         ejercicioElimination.setText("Eliminar");
         ejercicioElimination.addActionListener(new java.awt.event.ActionListener() {
@@ -164,12 +174,17 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Rutinas"));
         jPanel3.setLayout(new java.awt.GridBagLayout());
 
-        jButton15.setText("Añadir");
+        btn_AñadirRutina.setText("Añadir");
+        btn_AñadirRutina.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_AñadirRutinaActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.25;
-        jPanel3.add(jButton15, gridBagConstraints);
+        jPanel3.add(btn_AñadirRutina, gridBagConstraints);
 
         rutinaElimination.setText("Eliminar");
         rutinaElimination.addActionListener(new java.awt.event.ActionListener() {
@@ -214,12 +229,17 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Rutina-Ejercicio"));
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        jButton19.setText("Añadir");
+        btn_RutinaEjercicio.setText("Añadir");
+        btn_RutinaEjercicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_RutinaEjercicioActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.25;
-        jPanel4.add(jButton19, gridBagConstraints);
+        jPanel4.add(btn_RutinaEjercicio, gridBagConstraints);
 
         rutinaEjercicioElimination.setText("Eliminar");
         rutinaEjercicioElimination.addActionListener(new java.awt.event.ActionListener() {
@@ -264,12 +284,17 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Rutina-Usuario"));
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
-        jButton23.setText("Añadir");
+        btn_RutinaUsuario.setText("Añadir");
+        btn_RutinaUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_RutinaUsuarioActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.25;
-        jPanel5.add(jButton23, gridBagConstraints);
+        jPanel5.add(btn_RutinaUsuario, gridBagConstraints);
 
         rutinaUsuarioElimination.setText("Eliminar");
         rutinaUsuarioElimination.addActionListener(new java.awt.event.ActionListener() {
@@ -384,6 +409,36 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         ver.setVisible(true);
     }//GEN-LAST:event_btn_verRutinaUsuarioActionPerformed
 
+    private void btn_AñadirUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AñadirUsuarioActionPerformed
+        // TODO add your handling code here:
+        AñadirUsuario ver=new AñadirUsuario();
+        ver.setVisible(true);
+    }//GEN-LAST:event_btn_AñadirUsuarioActionPerformed
+
+    private void btn_AñadirEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AñadirEjercicioActionPerformed
+        // TODO add your handling code here:
+        AñadirEjercicio ver=new AñadirEjercicio();
+        ver.setVisible(true);
+    }//GEN-LAST:event_btn_AñadirEjercicioActionPerformed
+
+    private void btn_AñadirRutinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AñadirRutinaActionPerformed
+        // TODO add your handling code here:
+        AñadirRutina ver=new AñadirRutina();
+        ver.setVisible(true);
+    }//GEN-LAST:event_btn_AñadirRutinaActionPerformed
+
+    private void btn_RutinaEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_RutinaEjercicioActionPerformed
+        // TODO add your handling code here:
+        AñadirRutinaEjercicio ver=new AñadirRutinaEjercicio();
+        ver.setVisible(true);
+    }//GEN-LAST:event_btn_RutinaEjercicioActionPerformed
+
+    private void btn_RutinaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_RutinaUsuarioActionPerformed
+        // TODO add your handling code here:
+        AñadirRutinaEjecuciones ver=new AñadirRutinaEjecuciones();
+        ver.setVisible(true);
+    }//GEN-LAST:event_btn_RutinaUsuarioActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -410,20 +465,20 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_AñadirEjercicio;
+    private javax.swing.JButton btn_AñadirRutina;
+    private javax.swing.JButton btn_AñadirUsuario;
+    private javax.swing.JButton btn_RutinaEjercicio;
+    private javax.swing.JButton btn_RutinaUsuario;
     private javax.swing.JButton btn_verEjercicios;
     private javax.swing.JButton btn_verRutinaEjercicio;
     private javax.swing.JButton btn_verRutinaUsuario;
     private javax.swing.JButton btn_verRutinas;
     private javax.swing.JButton btn_verUsers;
     private javax.swing.JButton ejercicioElimination;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton13;
-    private javax.swing.JButton jButton15;
     private javax.swing.JButton jButton17;
-    private javax.swing.JButton jButton19;
     private javax.swing.JButton jButton21;
-    private javax.swing.JButton jButton23;
     private javax.swing.JButton jButton25;
     private javax.swing.JButton jButton9;
     private javax.swing.JMenu jMenu1;
