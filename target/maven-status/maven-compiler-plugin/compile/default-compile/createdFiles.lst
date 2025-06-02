@@ -4,6 +4,7 @@ com\mycompany\proyectoprueba\VerRutinasUsuarios.class
 com\mycompany\proyectoprueba\VerRutinasEjercicios.class
 com\mycompany\proyectoprueba\AñadirEjercicio$1.class
 com\mycompany\proyectoprueba\EliminacionUsuario$1.class
+com\mycompany\proyectoprueba\AñadirRutinaEjercicio.class
 GymTrackerApp.class
 com\mycompany\proyectoprueba\VerRutinas.class
 com\mycompany\proyectoprueba\EliminacionEjercicio.class
