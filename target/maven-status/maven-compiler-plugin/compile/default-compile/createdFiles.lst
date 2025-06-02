@@ -2,10 +2,12 @@ com\mycompany\proyectoprueba\PantallaPrincipal$5.class
 com\mycompany\proyectoprueba\VerUsuarios.class
 com\mycompany\proyectoprueba\VerRutinasUsuarios.class
 com\mycompany\proyectoprueba\VerRutinasEjercicios.class
+com\mycompany\proyectoprueba\AñadirEjercicio$1.class
 com\mycompany\proyectoprueba\EliminacionUsuario$1.class
 GymTrackerApp.class
 com\mycompany\proyectoprueba\VerRutinas.class
 com\mycompany\proyectoprueba\EliminacionEjercicio.class
+com\mycompany\proyectoprueba\AñadirRutina.class
 com\mycompany\proyectoprueba\PantallaPrincipal$3.class
 com\mycompany\proyectoprueba\AñadirEjercicio.class
 com\mycompany\proyectoprueba\PantallaPrincipal$8.class
