@@ -23,9 +23,11 @@ public class AñadirRutina extends javax.swing.JFrame {
     public AñadirRutina() {
         listModel=new DefaultListModel<>();
         comboBoxModel=new DefaultComboBoxModel<>();
+        comboBoxModelUsuarios=new DefaultComboBoxModel<>();
         initComponents();
         lista.setModel(listModel);
         combo_ejercicio.setModel(comboBoxModel);
+        comboUsuario.setModel(comboBoxModelUsuarios);
         Ejercicio e=new Ejercicio("Prueba", "Biceps", "AAAA", "SDADASDASD");
         comboBoxModel.addElement(e);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -42,7 +44,7 @@ public class AñadirRutina extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        comboUsuario = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -68,13 +70,12 @@ public class AñadirRutina extends javax.swing.JFrame {
         jPanel1Layout.rowHeights = new int[] {0, 26, 0, 26, 0, 26, 0, 26, 0};
         jPanel1.setLayout(jPanel1Layout);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        jPanel1.add(jComboBox1, gridBagConstraints);
+        jPanel1.add(comboUsuario, gridBagConstraints);
 
         jLabel1.setText("Usuario");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -268,10 +269,10 @@ public class AñadirRutina extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_add;
+    private javax.swing.JComboBox<Usuario> comboUsuario;
     private javax.swing.JComboBox<Ejercicio> combo_ejercicio;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -287,4 +288,5 @@ public class AñadirRutina extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     private DefaultListModel<Ejercicio> listModel;
     private DefaultComboBoxModel<Ejercicio> comboBoxModel;
+    private DefaultComboBoxModel<Usuario> comboBoxModelUsuarios;
 }

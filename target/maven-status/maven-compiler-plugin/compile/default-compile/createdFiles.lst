@@ -3,6 +3,7 @@ com\mycompany\proyectoprueba\Usuario.class
 com\mycompany\proyectoprueba\PantallaPrincipal$11.class
 com\mycompany\proyectoprueba\PantallaPrincipal$5.class
 com\mycompany\proyectoprueba\VerUsuarios.class
+com\mycompany\proyectoprueba\ModificarRutinas.class
 com\mycompany\proyectoprueba\AñadirRutina$2.class
 com\mycompany\proyectoprueba\VerRutinasUsuarios.class
 com\mycompany\proyectoprueba\ModificarEjercicio$1.class
@@ -19,7 +20,6 @@ com\mycompany\proyectoprueba\AñadirRutina.class
 com\mycompany\proyectoprueba\PantallaPrincipal$3.class
 com\mycompany\proyectoprueba\AñadirEjercicio.class
 com\mycompany\proyectoprueba\AñadirRutinaEjecuciones.class
-com\mycompany\proyectoprueba\PantallaPrincipal$14.class
 com\mycompany\proyectoprueba\PantallaPrincipal$8.class
 com\mycompany\proyectoprueba\EliminacionUsuario.class
 com\mycompany\proyectoprueba\PantallaPrincipal$12.class
@@ -35,9 +35,7 @@ com\mycompany\proyectoprueba\PantallaPrincipal$1.class
 com\mycompany\proyectoprueba\EliminacionRutina.class
 com\mycompany\proyectoprueba\PantallaPrincipal$7.class
 com\mycompany\proyectoprueba\AñadirUsuario.class
-com\mycompany\proyectoprueba\PantallaPrincipal$15.class
 com\mycompany\proyectoprueba\EliminacionRutina$1.class
-com\mycompany\proyectoprueba\PantallaPrincipal$13.class
 com\mycompany\proyectoprueba\PantallaPrincipal$9.class
 com\mycompany\proyectoprueba\EliminacionRutinaEjercicio.class
 com\mycompany\proyectoprueba\RutinaEjercicio.class
