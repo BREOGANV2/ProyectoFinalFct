@@ -7,6 +7,7 @@ AñadirEjercicio$1.class
 AñadirRutinaEjecuciones$2.class
 EliminacionRutina.class
 PantallaPrincipal$7.class
+EliminacionUsuario$2.class
 RutinaDAO.class
 PantallaPrincipal$3.class
 VerUsuarios.class
@@ -22,6 +23,7 @@ AñadirRutinaEjercicio.class
 AñadirRutinaEjecuciones$1.class
 EliminacionEjercicio$1.class
 RutinaEjercicio.class
+EliminacionUsuario$3.class
 PantallaPrincipal$1.class
 ModificarUsuario.class
 DatabaseManager.class
@@ -52,6 +54,7 @@ PantallaPrincipal$13.class
 Usuario.class
 EliminacionEjercicio.class
 PantallaPrincipal$2.class
+VerRutinas$1.class
 ModificarEjercicio$1.class
 Rutina.class
 PantallaPrincipal$16.class

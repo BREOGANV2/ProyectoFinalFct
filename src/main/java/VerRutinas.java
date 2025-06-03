@@ -4,6 +4,13 @@
  */
 
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 /**
@@ -17,13 +24,44 @@ public class VerRutinas extends javax.swing.JFrame {
     /**
      * Creates new form VerUsuarios
      */
-    public VerRutinas() {
-        
+     public VerRutinas() {
         initComponents();
-        modelTable=table.getModel();
+        modeloTabla = (DefaultTableModel) table.getModel();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        cargarRutinasConNombreUsuario(); // solo se llama al método
     }
 
+    public void cargarRutinasConNombreUsuario() {
+        try {
+            // 1. Obtener usuarios y crear mapa id ➜ nombre
+            List<Usuario> usuarios = UsuarioDAO.getInstance().selectAll();
+            Map<Integer, String> mapaUsuarios = new HashMap<>();
+            for (Usuario u : usuarios) {
+                mapaUsuarios.put(u.getIdUsuario(), u.getNombre());
+            }
+
+            // 2. Obtener rutinas
+            List<Rutina> rutinas = RutinaDAO.getInstance().selectAll();
+
+            // 3. Llenar la tabla
+            modeloTabla.setRowCount(0); // limpiar tabla
+            for (Rutina rutina : rutinas) {
+                String nombreUsuario = mapaUsuarios.getOrDefault(rutina.getIdUsuario(), "Desconocido");
+                Object[] fila = {
+                    rutina,
+                    nombreUsuario,
+                    rutina.getDescripcion(),
+                    rutina.getObjetivo(),
+                    rutina.getFechaCreacion()
+                };
+                modeloTabla.addRow(fila);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al cargar rutinas y usuarios", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -52,6 +90,11 @@ public class VerRutinas extends javax.swing.JFrame {
                 "Nombre", "Usuario", "Descripcion", "Objetivo", "Fecha"
             }
         ));
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(table);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -65,6 +108,61 @@ public class VerRutinas extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+        // TODO add your handling code here:
+        int filaSeleccionada = table.rowAtPoint(evt.getPoint());
+        if (filaSeleccionada >= 0) {
+            mostrarEjerciciosDeRutina(filaSeleccionada);
+        }
+    }//GEN-LAST:event_tableMouseClicked
+
+    private void mostrarEjerciciosDeRutina(int fila) {
+    try {
+        // Obtener el ID de la rutina desde la tabla (columna 0)
+        Object valor = modeloTabla.getValueAt(fila, 0);
+if (!(valor instanceof Rutina rutina)) {
+    JOptionPane.showMessageDialog(this, "No se pudo obtener la rutina desde la tabla.", "Error", JOptionPane.ERROR_MESSAGE);
+    return;
+}
+
+int idRutina = rutina.getIdRutina();
+
+
+
+        // Obtener todas las asignaciones de ejercicios para esa rutina
+        List<RutinaEjercicio> asignaciones = RutinaEjercicioDAO.getInstance().selectAll();
+        List<Integer> idsEjercicios = new ArrayList<>();
+
+        for (RutinaEjercicio re : asignaciones) {
+            if (re.getIdRutina() == idRutina) {
+                idsEjercicios.add(re.getIdEjercicio());
+            }
+        }
+
+        // Obtener todos los ejercicios y armar una lista de nombres
+        List<Ejercicio> todos = EjercicioDAO.getInstance().selectAll();
+        List<String> nombres = new ArrayList<>();
+
+        for (Ejercicio e : todos) {
+            if (idsEjercicios.contains(e.getIdEjercicio())) {
+                nombres.add(e.getNombre());
+            }
+        }
+
+        // Mostrar en panel
+        if (nombres.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Esta rutina no tiene ejercicios asignados.", "Ejercicios", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            String mensaje = String.join("\n", nombres);
+            JOptionPane.showMessageDialog(this, mensaje, "Ejercicios de la rutina", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al cargar ejercicios", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
 
     /**
      * @param args the command line arguments
@@ -95,5 +193,5 @@ public class VerRutinas extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
-    private TableModel modelTable;
+    private DefaultTableModel modeloTabla;
 }

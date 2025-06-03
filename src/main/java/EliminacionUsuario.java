@@ -3,23 +3,41 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+
 /**
  *
  * @author HREF DIGITAL
  */
 public class EliminacionUsuario extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(EliminacionUsuario.class.getName());
 
     /**
      * Creates new form EliminacionUsuario
      */
     public EliminacionUsuario() {
-        
+
         initComponents();
-        modelTabla=table.getModel();
+        modelTabla = new DefaultTableModel(
+                new String[]{"Nombre", "Edad", "Genero", "Fecha Registro"}, 0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // bloquear edición
+            }
+        };
+        table.setModel(modelTabla);
+
+        pintarTablaUsuarios(); // cargar datos
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
     }
@@ -72,6 +90,11 @@ public class EliminacionUsuario extends javax.swing.JFrame {
         jPanel1.add(jScrollPane1, gridBagConstraints);
 
         jButton1.setText("Eliminar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton1, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -86,11 +109,116 @@ public class EliminacionUsuario extends javax.swing.JFrame {
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
         // TODO add your handling code here:
         int row = table.getSelectedRow();
-if (row >= 0) {
-    table.setRowSelectionInterval(row, row);    // selecciona la fila
-    table.setColumnSelectionInterval(0, 0);     // fuerza que solo la columna 0 quede seleccionada
-}
+        if (row >= 0) {
+            table.setRowSelectionInterval(row, row);    // selecciona la fila
+            table.setColumnSelectionInterval(0, 0);     // fuerza que solo la columna 0 quede seleccionada
+        }
     }//GEN-LAST:event_tableMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int fila = table.getSelectedRow();
+    if (fila == -1) {
+        JOptionPane.showMessageDialog(this, "Selecciona un usuario para eliminar", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    Usuario usuario = (Usuario) modelTabla.getValueAt(fila, 0);
+
+    int confirmacion = JOptionPane.showConfirmDialog(
+        this,
+        "¿Seguro que deseas eliminar al usuario \"" + usuario.getNombre() + "\" y todo lo asociado?",
+        "Confirmación",
+        JOptionPane.YES_NO_OPTION
+    );
+
+    if (confirmacion != JOptionPane.YES_OPTION) return;
+
+    Connection conn = null;
+
+    try {
+        conn = DatabaseManager.getInstance().getConnection();
+        conn.setAutoCommit(false); // empezar transacción
+
+        // 1. Obtener todas las rutinas del usuario
+        List<Integer> idRutinas = new ArrayList<>();
+        String sqlRutinas = "SELECT id_rutina FROM Rutinas WHERE id_usuario = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sqlRutinas)) {
+            ps.setInt(1, usuario.getIdUsuario());
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    idRutinas.add(rs.getInt("id_rutina"));
+                }
+            }
+        }
+
+        for (int idRutina : idRutinas) {
+            // 2. Eliminar ejecuciones
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM Rutina_Ejecuciones WHERE id_rutina = ?")) {
+                ps.setInt(1, idRutina);
+                ps.executeUpdate();
+            }
+
+            // 3. Eliminar ejercicios asignados
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM Rutina_Ejercicios WHERE id_rutina = ?")) {
+                ps.setInt(1, idRutina);
+                ps.executeUpdate();
+            }
+
+            // 4. Eliminar la rutina
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM Rutinas WHERE id_rutina = ?")) {
+                ps.setInt(1, idRutina);
+                ps.executeUpdate();
+            }
+        }
+
+        // 5. Finalmente, eliminar el usuario
+        try (PreparedStatement ps = conn.prepareStatement("DELETE FROM Usuarios WHERE id_usuario = ?")) {
+            ps.setInt(1, usuario.getIdUsuario());
+            ps.executeUpdate();
+        }
+
+        conn.commit();
+        JOptionPane.showMessageDialog(this, "Usuario y datos relacionados eliminados correctamente.");
+        pintarTablaUsuarios(); // actualizar tabla
+
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        try {
+            if (conn != null) conn.rollback();
+        } catch (SQLException rollbackEx) {
+            rollbackEx.printStackTrace();
+        }
+        JOptionPane.showMessageDialog(this, "Error al eliminar usuario", "Error", JOptionPane.ERROR_MESSAGE);
+    } finally {
+        try {
+            if (conn != null) conn.setAutoCommit(true);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void pintarTablaUsuarios() {
+        try {
+            List<Usuario> usuariosCargados = UsuarioDAO.getInstance().selectAll(); // obtener usuarios
+
+            modelTabla.setRowCount(0); // limpiar tabla
+
+            for (Usuario u : usuariosCargados) {
+                Object[] fila = {
+                    u, // mostramos el objeto, se imprime su toString()
+                    u.getEdad(),
+                    u.getGenero(),
+                    u.getFechaRegistro()
+                };
+                modelTabla.addRow(fila);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al cargar usuarios", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -123,5 +251,5 @@ if (row >= 0) {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
-    private TableModel modelTabla;
+    private DefaultTableModel modelTabla;
 }

@@ -21,11 +21,11 @@ public class VerUsuarios extends javax.swing.JFrame {
     public VerUsuarios() {
 
         initComponents();
-            
-        table.setModel(new DefaultTableModel(
+        modelTabla=new DefaultTableModel(
                 new Object[][]{},
                 new String[]{"ID", "Nombre", "Edad", "Género", "Fecha Registro", "Contraseña"}
-        ));
+        );
+        table.setModel(modelTabla);
         cargarUsuariosDesdeDAO();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }

@@ -3,7 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
-
+import java.sql.SQLException;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 /**
@@ -11,17 +14,38 @@ import javax.swing.table.TableModel;
  * @author HREF DIGITAL
  */
 public class VerEjercicios extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VerEjercicios.class.getName());
 
     /**
      * Creates new form VerUsuarios
      */
     public VerEjercicios() {
-        
         initComponents();
-        modelTable=table.getModel();
+        modeloTabla = (DefaultTableModel) table.getModel();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        cargarEjerciciosEnTabla();
+    }
+
+    private void cargarEjerciciosEnTabla() {
+        try {
+            List<Ejercicio> ejercicios = EjercicioDAO.getInstance().selectAll();
+            modeloTabla.setRowCount(0); // Limpiar tabla
+
+            for (Ejercicio ejercicio : ejercicios) {
+                Object[] fila = {
+                    ejercicio.getNombre(),
+                    ejercicio.getGrupoMuscular(),
+                    ejercicio.getDescripcion(),
+                    ejercicio.getUrlImagen()
+                };
+                modeloTabla.addRow(fila);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al cargar ejercicios", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -107,5 +131,5 @@ public class VerEjercicios extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
-    private TableModel modelTable;
+    private DefaultTableModel modeloTabla;
 }

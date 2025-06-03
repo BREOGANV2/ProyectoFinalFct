@@ -3,7 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
-
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 /**
@@ -11,18 +16,56 @@ import javax.swing.table.TableModel;
  * @author HREF DIGITAL
  */
 public class VerRutinasUsuarios extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VerRutinasUsuarios.class.getName());
 
     /**
      * Creates new form VerUsuarios
      */
     public VerRutinasUsuarios() {
-       
-        initComponents();
-         modeloTabla=table.getModel();
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+    initComponents();
+    String[] columnas = { "Rutina", "Fecha", "Duración (min)", "Notas" };
+table.setModel(new DefaultTableModel(columnas, 0));
+modeloTabla = (DefaultTableModel) table.getModel();
+
+    setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+    cargarEjecucionesConNombreRutina();
+}
+
+
+    private void cargarEjecucionesConNombreRutina() {
+    try {
+        // Mapa de id_rutina ➜ nombre_rutina
+        List<Rutina> rutinas = RutinaDAO.getInstance().selectAll();
+        Map<Integer, String> mapaRutinas = new HashMap<>();
+        for (Rutina r : rutinas) {
+            mapaRutinas.put(r.getIdRutina(), r.getNombre());
+        }
+
+        // Lista de ejecuciones
+        List<RutinaEjecucion> ejecuciones = RutinaEjecucionDAO.getInstance().selectAll();
+
+        // Limpiar tabla
+        modeloTabla.setRowCount(0);
+
+        // Llenar tabla con datos
+        for (RutinaEjecucion ejecucion : ejecuciones) {
+            String nombreRutina = mapaRutinas.getOrDefault(ejecucion.getIdRutina(), "Desconocida");
+            Object[] fila = {
+                nombreRutina,
+                ejecucion.getFechaEjecucion(),
+                ejecucion.getDuracionMinutos() != null ? ejecucion.getDuracionMinutos() : "-",
+                ejecucion.getNotas()
+            };
+            modeloTabla.addRow(fila);
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al cargar ejecuciones", "Error", JOptionPane.ERROR_MESSAGE);
     }
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -107,5 +150,5 @@ public class VerRutinasUsuarios extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
-    private TableModel modeloTabla;
+    private DefaultTableModel modeloTabla;
 }
