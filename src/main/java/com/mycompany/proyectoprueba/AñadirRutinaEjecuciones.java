@@ -4,6 +4,13 @@
  */
 package com.mycompany.proyectoprueba;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author HREF DIGITAL
@@ -16,7 +23,9 @@ public class AñadirRutinaEjecuciones extends javax.swing.JFrame {
      * Creates new form AñadirRutinaEjecuciones
      */
     public AñadirRutinaEjecuciones() {
+        
         initComponents();
+        tableModel=tabla.getModel();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
@@ -32,23 +41,25 @@ public class AñadirRutinaEjecuciones extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtfecha = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabla = new javax.swing.JTable();
         jTextField2 = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
+        btn_add = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(500, 500));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Añadir Rutina Ejecuciones"));
         java.awt.GridBagLayout jPanel1Layout = new java.awt.GridBagLayout();
         jPanel1Layout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
-        jPanel1Layout.rowHeights = new int[] {0, 26, 0, 26, 0, 26, 0, 26, 0};
+        jPanel1Layout.rowHeights = new int[] {0, 26, 0, 26, 0, 26, 0, 26, 0, 26, 0};
         jPanel1.setLayout(jPanel1Layout);
 
         jLabel1.setText("Fecha dd/mm/yyyy");
@@ -63,7 +74,7 @@ public class AñadirRutinaEjecuciones extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel1.add(jTextField1, gridBagConstraints);
+        jPanel1.add(txtfecha, gridBagConstraints);
 
         jLabel2.setText("Duración");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -91,7 +102,7 @@ public class AñadirRutinaEjecuciones extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(jLabel3, gridBagConstraints);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -99,15 +110,23 @@ public class AñadirRutinaEjecuciones extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Nombre", "Descripcion", "Objetivo", "Fecha Creación"
             }
-        ));
-        jScrollPane2.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tabla);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -125,6 +144,17 @@ public class AñadirRutinaEjecuciones extends javax.swing.JFrame {
         gridBagConstraints.gridy = 2;
         jPanel1.add(jSeparator1, gridBagConstraints);
 
+        btn_add.setText("Añadir");
+        btn_add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_addActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 10;
+        jPanel1.add(btn_add, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -134,9 +164,26 @@ public class AñadirRutinaEjecuciones extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btn_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addActionPerformed
+        // TODO add your handling code here:
+        Date fecha=obtenerFechaDesdeTextField(txtfecha);
+    }//GEN-LAST:event_btn_addActionPerformed
+
     /**
      * @param args the command line arguments
      */
+     public static Date obtenerFechaDesdeTextField(JTextField textField) {
+        String textoFecha = textField.getText().trim();
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        formato.setLenient(false); // Para que no acepte fechas inválidas como 32/01/2023
+
+        try {
+            return formato.parse(textoFecha);
+        } catch (ParseException e) {
+            System.out.println("Fecha inválida: " + textoFecha);
+            return null;
+        }
+}
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -160,6 +207,7 @@ public class AñadirRutinaEjecuciones extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_add;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -167,9 +215,12 @@ public class AñadirRutinaEjecuciones extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JTable tabla;
+    private javax.swing.JTextField txtfecha;
     // End of variables declaration//GEN-END:variables
+    private TableModel tableModel;
 }
+
+

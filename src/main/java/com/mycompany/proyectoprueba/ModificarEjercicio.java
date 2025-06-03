@@ -6,6 +6,7 @@ package com.mycompany.proyectoprueba;
 
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -19,7 +20,10 @@ public class ModificarEjercicio extends javax.swing.JFrame {
      * Creates new form ModificarEjercicio
      */
     public ModificarEjercicio() {
+        
         initComponents();
+        modeloTabla=table.getModel();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -34,7 +38,7 @@ public class ModificarEjercicio extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -45,12 +49,13 @@ public class ModificarEjercicio extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(500, 500));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Modificar Ejercicio"));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -58,10 +63,10 @@ public class ModificarEjercicio extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Nombre", "Descripcion", "Grupo", "Url_imagen"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(table);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -190,9 +195,10 @@ public class ModificarEjercicio extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
     private String rutaArchivoSeleccionado;
+    private TableModel modeloTabla;
 }

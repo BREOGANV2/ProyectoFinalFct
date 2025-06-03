@@ -4,6 +4,8 @@
  */
 package com.mycompany.proyectoprueba;
 
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author HREF DIGITAL
@@ -16,7 +18,10 @@ public class ModificarUsuario extends javax.swing.JFrame {
      * Creates new form ModificarUsuario
      */
     public ModificarUsuario() {
+        
         initComponents();
+        modeloTabla=table.getModel();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -31,7 +36,7 @@ public class ModificarUsuario extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jSpinner1 = new javax.swing.JSpinner();
@@ -41,12 +46,13 @@ public class ModificarUsuario extends javax.swing.JFrame {
         jComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(500, 500));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Modificar Usuario"));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -54,10 +60,10 @@ public class ModificarUsuario extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Nombre", "Edad", "Genero", "Fecha"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(table);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -161,7 +167,8 @@ public class ModificarUsuario extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
+    private TableModel modeloTabla;
 }

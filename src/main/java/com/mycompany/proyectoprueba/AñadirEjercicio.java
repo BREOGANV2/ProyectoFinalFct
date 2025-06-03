@@ -47,6 +47,7 @@ public class AñadirEjercicio extends javax.swing.JFrame {
         btn_fileSelector = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(500, 500));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setText("Nombre");

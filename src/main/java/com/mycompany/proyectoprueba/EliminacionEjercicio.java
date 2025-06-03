@@ -4,6 +4,7 @@
  */
 package com.mycompany.proyectoprueba;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 /**
  *
  * @author HREF DIGITAL
@@ -16,7 +17,9 @@ public class EliminacionEjercicio extends javax.swing.JFrame {
      * Creates new form EliminacionUsuario
      */
     public EliminacionEjercicio() {
+        
         initComponents();
+        modelTabla=table.getModel();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         
     }
@@ -33,16 +36,17 @@ public class EliminacionEjercicio extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(500, 500));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Eliminacion de Ejercicio"));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -50,16 +54,16 @@ public class EliminacionEjercicio extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Nombre", "Grupo Muscular", "Descripción", "url_imagen"
             }
         ));
-        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+        table.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable1MouseClicked(evt);
+                tableMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(table);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -79,14 +83,14 @@ public class EliminacionEjercicio extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
         // TODO add your handling code here:
-        int row = jTable1.getSelectedRow();
+        int row = table.getSelectedRow();
 if (row >= 0) {
-    jTable1.setRowSelectionInterval(row, row);    // selecciona la fila
-    jTable1.setColumnSelectionInterval(0, 0);     // fuerza que solo la columna 0 quede seleccionada
+    table.setRowSelectionInterval(row, row);    // selecciona la fila
+    table.setColumnSelectionInterval(0, 0);     // fuerza que solo la columna 0 quede seleccionada
 }
-    }//GEN-LAST:event_jTable1MouseClicked
+    }//GEN-LAST:event_tableMouseClicked
 
     /**
      * @param args the command line arguments
@@ -117,6 +121,7 @@ if (row >= 0) {
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
+    private TableModel modelTabla;
 }
