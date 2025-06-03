@@ -1,5 +1,5 @@
+
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +48,56 @@ public class UsuarioDAO {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
+        }
+    }
+
+    // NUEVO: Eliminación completa en cascada con transacción
+    public void deleteCascade(int idUsuario) throws SQLException {
+        Connection conn = DatabaseManager.getInstance().getConnection();
+        try {
+            conn.setAutoCommit(false);
+
+            // Obtener rutinas del usuario
+            List<Integer> idRutinas = new ArrayList<>();
+            String sqlRutinas = "SELECT id_rutina FROM Rutinas WHERE id_usuario = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sqlRutinas)) {
+                stmt.setInt(1, idUsuario);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    while (rs.next()) {
+                        idRutinas.add(rs.getInt("id_rutina"));
+                    }
+                }
+            }
+
+            // Eliminar ejecuciones, ejercicios y rutinas
+            for (int idRutina : idRutinas) {
+                try (PreparedStatement stmt1 = conn.prepareStatement("DELETE FROM Rutina_Ejecuciones WHERE id_rutina=?");
+                     PreparedStatement stmt2 = conn.prepareStatement("DELETE FROM Rutina_Ejercicios WHERE id_rutina=?");
+                     PreparedStatement stmt3 = conn.prepareStatement("DELETE FROM Rutinas WHERE id_rutina=?")) {
+
+                    stmt1.setInt(1, idRutina);
+                    stmt1.executeUpdate();
+
+                    stmt2.setInt(1, idRutina);
+                    stmt2.executeUpdate();
+
+                    stmt3.setInt(1, idRutina);
+                    stmt3.executeUpdate();
+                }
+            }
+
+            // Eliminar usuario
+            try (PreparedStatement stmt = conn.prepareStatement("DELETE FROM Usuarios WHERE id_usuario=?")) {
+                stmt.setInt(1, idUsuario);
+                stmt.executeUpdate();
+            }
+
+            conn.commit();
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        } finally {
+            conn.setAutoCommit(true);
         }
     }
 

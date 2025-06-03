@@ -1,3 +1,5 @@
+
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,19 +50,44 @@ public class EjercicioDAO {
         }
     }
 
+    // NUEVO: Eliminar primero en Rutina_Ejercicios, luego el ejercicio
+    public void deleteCascade(int idEjercicio) throws SQLException {
+        Connection conn = DatabaseManager.getInstance().getConnection();
+        try {
+            conn.setAutoCommit(false);
+
+            try (PreparedStatement stmt1 = conn.prepareStatement("DELETE FROM Rutina_Ejercicios WHERE id_ejercicio=?");
+                 PreparedStatement stmt2 = conn.prepareStatement("DELETE FROM Ejercicios WHERE id_ejercicio=?")) {
+
+                stmt1.setInt(1, idEjercicio);
+                stmt1.executeUpdate();
+
+                stmt2.setInt(1, idEjercicio);
+                stmt2.executeUpdate();
+            }
+
+            conn.commit();
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        } finally {
+            conn.setAutoCommit(true);
+        }
+    }
+
     public List<Ejercicio> selectAll() throws SQLException {
         List<Ejercicio> list = new ArrayList<>();
         String sql = "SELECT * FROM Ejercicios";
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                Ejercicio ejercicio = new Ejercicio();
-                ejercicio.setIdEjercicio(rs.getInt("id_ejercicio"));
-                ejercicio.setNombre(rs.getString("nombre"));
-                ejercicio.setGrupoMuscular(rs.getString("grupo_muscular"));
-                ejercicio.setDescripcion(rs.getString("descripcion"));
-                ejercicio.setUrlImagen(rs.getString("url_imagen"));
-                list.add(ejercicio);
+                Ejercicio e = new Ejercicio();
+                e.setIdEjercicio(rs.getInt("id_ejercicio"));
+                e.setNombre(rs.getString("nombre"));
+                e.setGrupoMuscular(rs.getString("grupo_muscular"));
+                e.setDescripcion(rs.getString("descripcion"));
+                e.setUrlImagen(rs.getString("url_imagen"));
+                list.add(e);
             }
         }
         return list;

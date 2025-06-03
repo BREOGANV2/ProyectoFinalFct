@@ -51,6 +51,35 @@ public class RutinaDAO {
         }
     }
 
+    // NUEVO: Eliminación completa en cascada con transacción
+    public void deleteCascade(int idRutina) throws SQLException {
+        Connection conn = DatabaseManager.getInstance().getConnection();
+        try {
+            conn.setAutoCommit(false);
+
+            try (PreparedStatement stmt1 = conn.prepareStatement("DELETE FROM Rutina_Ejecuciones WHERE id_rutina=?");
+                 PreparedStatement stmt2 = conn.prepareStatement("DELETE FROM Rutina_Ejercicios WHERE id_rutina=?");
+                 PreparedStatement stmt3 = conn.prepareStatement("DELETE FROM Rutinas WHERE id_rutina=?")) {
+
+                stmt1.setInt(1, idRutina);
+                stmt1.executeUpdate();
+
+                stmt2.setInt(1, idRutina);
+                stmt2.executeUpdate();
+
+                stmt3.setInt(1, idRutina);
+                stmt3.executeUpdate();
+            }
+
+            conn.commit();
+        } catch (SQLException e) {
+            conn.rollback();
+            throw e;
+        } finally {
+            conn.setAutoCommit(true);
+        }
+    }
+
     public List<Rutina> selectAll() throws SQLException {
         List<Rutina> list = new ArrayList<>();
         String sql = "SELECT * FROM Rutinas";

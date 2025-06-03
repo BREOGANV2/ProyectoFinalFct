@@ -3,7 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
-
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 /**
@@ -11,17 +12,41 @@ import javax.swing.table.TableModel;
  * @author HREF DIGITAL
  */
 public class VerUsuarios extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VerUsuarios.class.getName());
 
     /**
      * Creates new form VerUsuarios
      */
     public VerUsuarios() {
-        
+
         initComponents();
-        modelTabla=table.getModel();
+
+        table.setModel(new DefaultTableModel(
+                new Object[][]{},
+                new String[]{"ID", "Nombre", "Edad", "Género", "Fecha Registro", "Contraseña"}
+        ));
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+    }
+
+    private void cargarUsuariosDesdeDAO() {
+        try {
+            modelTabla.setRowCount(0); // Limpiar la tabla
+            List<Usuario> lista = UsuarioDAO.getInstance().selectAll();
+            for (Usuario u : lista) {
+                modelTabla.addRow(new Object[]{
+                    u.getIdUsuario(),
+                    u.getNombre(),
+                    u.getEdad(),
+                    u.getGenero(),
+                    u.getFechaRegistro(),
+                    u.getContraseña()
+                });
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(this, "Error al cargar usuarios.");
+        }
     }
 
     /**
@@ -97,5 +122,5 @@ public class VerUsuarios extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
-    private TableModel modelTabla;
+    private DefaultTableModel modelTabla;
 }
