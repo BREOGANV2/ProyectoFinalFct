@@ -21,15 +21,16 @@ public class VerUsuarios extends javax.swing.JFrame {
     public VerUsuarios() {
 
         initComponents();
-
+            
         table.setModel(new DefaultTableModel(
                 new Object[][]{},
                 new String[]{"ID", "Nombre", "Edad", "Género", "Fecha Registro", "Contraseña"}
         ));
+        cargarUsuariosDesdeDAO();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
-    private void cargarUsuariosDesdeDAO() {
+    public void cargarUsuariosDesdeDAO() {
         try {
             modelTabla.setRowCount(0); // Limpiar la tabla
             List<Usuario> lista = UsuarioDAO.getInstance().selectAll();
