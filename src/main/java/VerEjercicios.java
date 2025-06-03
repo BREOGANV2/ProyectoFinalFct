@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.proyectoprueba;
+
 
 import javax.swing.table.TableModel;
 
@@ -10,17 +10,17 @@ import javax.swing.table.TableModel;
  *
  * @author HREF DIGITAL
  */
-public class VerRutinasEjercicios extends javax.swing.JFrame {
+public class VerEjercicios extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VerRutinasEjercicios.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VerEjercicios.class.getName());
 
     /**
      * Creates new form VerUsuarios
      */
-    public VerRutinasEjercicios() {
+    public VerEjercicios() {
         
         initComponents();
-        modelTabla=table.getModel();
+        modelTable=table.getModel();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
@@ -43,13 +43,13 @@ public class VerRutinasEjercicios extends javax.swing.JFrame {
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Rutina", "Ejercicio", "Orden", "Series", "Repeticiones"
+                "Nombre", "Grupo Muscular", "Descripción", "url_imagen"
             }
         ));
         table.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -100,12 +100,12 @@ public class VerRutinasEjercicios extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new VerRutinasEjercicios().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new VerEjercicios().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
-    private TableModel modelTabla;
+    private TableModel modelTable;
 }

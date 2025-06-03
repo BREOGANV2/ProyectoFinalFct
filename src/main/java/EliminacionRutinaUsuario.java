@@ -2,21 +2,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.proyectoprueba;
+
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 /**
  *
  * @author HREF DIGITAL
  */
-public class EliminacionRutina extends javax.swing.JFrame {
+public class EliminacionRutinaUsuario extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(EliminacionRutina.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(EliminacionRutinaUsuario.class.getName());
 
     /**
      * Creates new form EliminacionUsuario
      */
-    public EliminacionRutina() {
+    public EliminacionRutinaUsuario() {
         
         initComponents();
         modelTabla=table.getModel();
@@ -43,18 +43,18 @@ public class EliminacionRutina extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(500, 500));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Eliminacion de Rutinas"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Eliminacion de Rutina Usuario"));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Nombre", "Descripción", "Objetivo", "Fecha", "Usuario"
+                "Rutina", "Fecha", "Duración", "Notas"
             }
         ));
         table.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -114,7 +114,7 @@ if (row >= 0) {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new EliminacionRutina().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new EliminacionRutinaUsuario().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

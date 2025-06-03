@@ -1,4 +1,4 @@
-package com.mycompany.proyectoprueba;
+
 
 public class RutinaEjercicio {
     private Integer idRutinaEjercicio;   // PK autoincremental

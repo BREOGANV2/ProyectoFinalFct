@@ -1,0 +1,83 @@
+-- Crear base de datos
+CREATE DATABASE IF NOT EXISTS gymtracker CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE gymtracker;
+
+-- Tabla Usuarios
+CREATE TABLE Usuarios (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    edad INT NOT NULL,
+    genero VARCHAR(20) NOT NULL,
+    fecha_registro DATE NOT NULL,
+    contraseña VARCHAR(255) NOT NULL
+);
+
+-- Tabla Ejercicios
+CREATE TABLE Ejercicios (
+    id_ejercicio INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL UNIQUE,
+    grupo_muscular VARCHAR(50) NOT NULL,
+    descripcion TEXT,
+    url_imagen VARCHAR(255)
+);
+
+-- Tabla Rutinas
+CREATE TABLE Rutinas (
+    id_rutina INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT,
+    objetivo VARCHAR(100),
+    fecha_creacion DATE NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario)
+);
+
+-- Tabla Rutina_Ejercicios (relación N:M con orden)
+CREATE TABLE Rutina_Ejercicios (
+    id_rutina_ejercicio INT AUTO_INCREMENT PRIMARY KEY,
+    id_rutina INT NOT NULL,
+    id_ejercicio INT NOT NULL,
+    orden INT NOT NULL,
+    series INT NOT NULL,
+    repeticiones VARCHAR(20) NOT NULL,
+    FOREIGN KEY (id_rutina) REFERENCES Rutinas(id_rutina),
+    FOREIGN KEY (id_ejercicio) REFERENCES Ejercicios(id_ejercicio)
+);
+
+-- Tabla Rutina_Ejecuciones
+CREATE TABLE Rutina_Ejecuciones (
+    id_ejecucion INT AUTO_INCREMENT PRIMARY KEY,
+    id_rutina INT NOT NULL,
+    fecha_ejecucion DATETIME NOT NULL,
+    duracion_minutos INT,
+    notas TEXT,
+    FOREIGN KEY (id_rutina) REFERENCES Rutinas(id_rutina)
+);
+
+-- Trigger: al eliminar un ejercicio, reordenar los restantes
+DELIMITER //
+CREATE TRIGGER after_rutina_ejercicio_delete
+AFTER DELETE ON Rutina_Ejercicios
+FOR EACH ROW
+BEGIN
+    UPDATE Rutina_Ejercicios
+    SET orden = orden - 1
+    WHERE id_rutina = OLD.id_rutina
+      AND orden > OLD.orden;
+END;
+//
+DELIMITER ;
+
+-- Trigger: al insertar un ejercicio en orden ocupado, desplazar los demás
+DELIMITER //
+CREATE TRIGGER before_rutina_ejercicio_insert
+BEFORE INSERT ON Rutina_Ejercicios
+FOR EACH ROW
+BEGIN
+    UPDATE Rutina_Ejercicios
+    SET orden = orden + 1
+    WHERE id_rutina = NEW.id_rutina
+      AND orden >= NEW.orden;
+END;
+//
+DELIMITER ;

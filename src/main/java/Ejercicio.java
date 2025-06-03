@@ -1,4 +1,4 @@
-package com.mycompany.proyectoprueba;
+
 
 public class Ejercicio {
     private Integer idEjercicio;            // Puede ser null si aún no está insertado
