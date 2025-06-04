@@ -92,4 +92,25 @@ public class EjercicioDAO {
         }
         return list;
     }
+    
+    public Ejercicio selectById(int id) throws SQLException {
+    String sql = "SELECT * FROM Ejercicios WHERE id_ejercicio = ?";
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setInt(1, id);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return new Ejercicio(
+                    rs.getInt("id_ejercicio"),
+                    rs.getString("nombre"),
+                    rs.getString("grupo_muscular"),
+                    rs.getString("descripcion"),
+                    rs.getString("url_imagen")
+                );
+            } else {
+                return null;
+            }
+        }
+    }
+}
+
 }

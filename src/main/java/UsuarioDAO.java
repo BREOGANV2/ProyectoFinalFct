@@ -119,4 +119,26 @@ public class UsuarioDAO {
         }
         return list;
     }
+    
+    public Usuario selectById(int id) throws SQLException {
+    String sql = "SELECT * FROM Usuarios WHERE id_usuario = ?";
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setInt(1, id);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                Usuario u = new Usuario();
+                u.setIdUsuario(rs.getInt("id_usuario"));
+                u.setNombre(rs.getString("nombre"));
+                u.setEdad(rs.getInt("edad"));
+                u.setGenero(rs.getString("genero"));
+                u.setFechaRegistro(rs.getDate("fecha_registro").toLocalDate());
+                u.setContraseña(rs.getString("contraseña"));
+                return u;
+            } else {
+                return null;
+            }
+        }
+    }
+}
+
 }

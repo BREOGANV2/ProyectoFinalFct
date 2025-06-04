@@ -1,15 +1,19 @@
+
+import java.awt.HeadlessException;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 
 /**
  *
  * @author HREF DIGITAL
  */
 public class AñadirUsuario extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AñadirUsuario.class.getName());
 
     /**
@@ -93,7 +97,12 @@ public class AñadirUsuario extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(jLabel3, gridBagConstraints);
 
-        jButton1.setText("jButton1");
+        jButton1.setText("Añadir");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
@@ -120,6 +129,39 @@ public class AñadirUsuario extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        String nombre = jTextField1.getText().trim();
+        String contraseña = jTextField2.getText().trim();
+        int edad = (Integer) jSpinner1.getValue();
+        String genero = (String) jComboBox1.getSelectedItem();
+
+        // Validaciones
+        if (nombre.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (contraseña.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La contraseña no puede estar vacía", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (edad <= 0) {
+            JOptionPane.showMessageDialog(this, "La edad debe ser mayor que 0", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Usuario usuario = new Usuario(nombre, edad, genero, java.time.LocalDate.now(), contraseña);
+
+        try {
+            UsuarioDAO.getInstance().insert(usuario);
+            JOptionPane.showMessageDialog(this, "Usuario añadido correctamente.");
+            dispose();  // Cierra la ventana tras añadir
+        } catch (HeadlessException | SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al insertar usuario", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

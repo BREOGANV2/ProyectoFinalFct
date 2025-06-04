@@ -3,25 +3,62 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+
 /**
  *
  * @author HREF DIGITAL
  */
 public class EliminacionRutina extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(EliminacionRutina.class.getName());
 
     /**
      * Creates new form EliminacionUsuario
      */
     public EliminacionRutina() {
-        
+
         initComponents();
-        modelTabla=table.getModel();
+        modelTabla = new DefaultTableModel(
+                new String[]{"Nombre", "Descripción", "Objetivo", "Fecha", "Usuario"}, 0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        table.setModel(modelTabla);
+        cargarRutinas(); // <--- Aquí el método nuevo
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        
+
+    }
+
+    private void cargarRutinas() {
+        try {
+            modelTabla.setRowCount(0); // limpiar tabla
+            List<Rutina> lista = RutinaDAO.getInstance().selectAll();
+
+            for (Rutina r : lista) {
+                String nombreUsuario = UsuarioDAO.getInstance().selectById(r.getIdUsuario()).getNombre();
+
+                modelTabla.addRow(new Object[]{
+                    r, // se mostrará r.toString() → nombre
+                    r.getDescripcion(),
+                    r.getObjetivo(),
+                    r.getFechaCreacion(),
+                    nombreUsuario
+                });
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al cargar rutinas", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -72,6 +109,11 @@ public class EliminacionRutina extends javax.swing.JFrame {
         jPanel1.add(jScrollPane1, gridBagConstraints);
 
         jButton1.setText("Eliminar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton1, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -86,11 +128,79 @@ public class EliminacionRutina extends javax.swing.JFrame {
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
         // TODO add your handling code here:
         int row = table.getSelectedRow();
-if (row >= 0) {
-    table.setRowSelectionInterval(row, row);    // selecciona la fila
-    table.setColumnSelectionInterval(0, 0);     // fuerza que solo la columna 0 quede seleccionada
-}
+        if (row >= 0) {
+            table.setRowSelectionInterval(row, row);
+            table.setColumnSelectionInterval(0, 0);
+        }
     }//GEN-LAST:event_tableMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int fila = table.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona una rutina para eliminar", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Rutina rutina = (Rutina) modelTabla.getValueAt(fila, 0); // asumimos que la columna 0 guarda el objeto completo
+
+        int confirmacion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Seguro que deseas eliminar la rutina '" + rutina.getNombre() + "' y todo lo asociado?",
+                "Confirmación",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirmacion != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        Connection conn = null;
+        try {
+            conn = DatabaseManager.getInstance().getConnection();
+            conn.setAutoCommit(false); // iniciar transacción
+
+            // 1. Eliminar ejecuciones de la rutina
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM Rutina_Ejecuciones WHERE id_rutina = ?")) {
+                ps.setInt(1, rutina.getIdRutina());
+                ps.executeUpdate();
+            }
+
+            // 2. Eliminar ejercicios de la rutina
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM Rutina_Ejercicios WHERE id_rutina = ?")) {
+                ps.setInt(1, rutina.getIdRutina());
+                ps.executeUpdate();
+            }
+
+            // 3. Eliminar la rutina en sí
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM Rutinas WHERE id_rutina = ?")) {
+                ps.setInt(1, rutina.getIdRutina());
+                ps.executeUpdate();
+            }
+
+            conn.commit();
+            JOptionPane.showMessageDialog(this, "Rutina y datos relacionados eliminados correctamente.");
+            cargarRutinas(); // refrescar tabla
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                }
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+            JOptionPane.showMessageDialog(this, "Error al eliminar la rutina", "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.setAutoCommit(true);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -123,5 +233,5 @@ if (row >= 0) {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
-    private TableModel modelTabla;
+    private DefaultTableModel modelTabla;
 }

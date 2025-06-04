@@ -3,7 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
-
+import java.awt.HeadlessException;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -14,21 +17,21 @@ import javax.swing.JOptionPane;
  * @author HREF DIGITAL
  */
 public class AñadirRutina extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AñadirRutina.class.getName());
 
     /**
      * Creates new form AñadirRutina
      */
     public AñadirRutina() {
-        listModel=new DefaultListModel<>();
-        comboBoxModel=new DefaultComboBoxModel<>();
-        comboBoxModelUsuarios=new DefaultComboBoxModel<>();
+        listModel = new DefaultListModel<>();
+        comboBoxModel = new DefaultComboBoxModel<>();
+        comboBoxModelUsuarios = new DefaultComboBoxModel<>();
         initComponents();
         lista.setModel(listModel);
         combo_ejercicio.setModel(comboBoxModel);
         comboUsuario.setModel(comboBoxModelUsuarios);
-        Ejercicio e=new Ejercicio("Prueba", "Biceps", "AAAA", "SDADASDASD");
+        Ejercicio e = new Ejercicio("Prueba", "Biceps", "AAAA", "SDADASDASD");
         comboBoxModel.addElement(e);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
@@ -54,7 +57,7 @@ public class AñadirRutina extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
         jLabel4 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        Añadir = new javax.swing.JButton();
         combo_ejercicio = new javax.swing.JComboBox<>();
         jScrollPane3 = new javax.swing.JScrollPane();
         lista = new javax.swing.JList<>();
@@ -145,12 +148,17 @@ public class AñadirRutina extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(jLabel4, gridBagConstraints);
 
-        jButton1.setText("jButton1");
+        Añadir.setText("jButton1");
+        Añadir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AñadirActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 20;
         gridBagConstraints.gridy = 14;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanel1.add(jButton1, gridBagConstraints);
+        jPanel1.add(Añadir, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -251,47 +259,105 @@ public class AñadirRutina extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         // Obtener el índice del elemento seleccionado en la lista
-    int indiceSeleccionado = lista.getSelectedIndex();
+        int indiceSeleccionado = lista.getSelectedIndex();
 
-    if (indiceSeleccionado != -1) {
-        // Confirmación opcional
-        int confirmacion = JOptionPane.showConfirmDialog(this,
-            "¿Estás seguro de que deseas eliminar este ejercicio?",
-            "Confirmar eliminación",
-            JOptionPane.YES_NO_OPTION);
+        if (indiceSeleccionado != -1) {
+            // Confirmación opcional
+            int confirmacion = JOptionPane.showConfirmDialog(this,
+                    "¿Estás seguro de que deseas eliminar este ejercicio?",
+                    "Confirmar eliminación",
+                    JOptionPane.YES_NO_OPTION);
 
-        if (confirmacion == JOptionPane.YES_OPTION) {
-            listModel.removeElementAt(indiceSeleccionado);
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                listModel.removeElementAt(indiceSeleccionado);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Selecciona un ejercicio de la lista para eliminar.",
+                    "Nada seleccionado",
+                    JOptionPane.WARNING_MESSAGE);
         }
-    } else {
-        JOptionPane.showMessageDialog(this,
-            "Selecciona un ejercicio de la lista para eliminar.",
-            "Nada seleccionado",
-            JOptionPane.WARNING_MESSAGE);
-    }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void btn_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addActionPerformed
         // Obtener el elemento seleccionado del combo
-    Ejercicio ejercicioSeleccionado = (Ejercicio) combo_ejercicio.getSelectedItem();
+        Ejercicio ejercicioSeleccionado = (Ejercicio) combo_ejercicio.getSelectedItem();
 
-    if (ejercicioSeleccionado != null) {
-        // Verificar si ya está en la lista
-        if (!listModel.contains(ejercicioSeleccionado)) {
-            listModel.addElement(ejercicioSeleccionado);
+        if (ejercicioSeleccionado != null) {
+            // Verificar si ya está en la lista
+            if (!listModel.contains(ejercicioSeleccionado)) {
+                listModel.addElement(ejercicioSeleccionado);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Este ejercicio ya está en la lista.",
+                        "Elemento duplicado",
+                        JOptionPane.WARNING_MESSAGE);
+            }
         } else {
             JOptionPane.showMessageDialog(this,
-                "Este ejercicio ya está en la lista.",
-                "Elemento duplicado",
-                JOptionPane.WARNING_MESSAGE);
+                    "Selecciona un ejercicio primero.",
+                    "Sin selección",
+                    JOptionPane.WARNING_MESSAGE);
         }
-    } else {
-        JOptionPane.showMessageDialog(this,
-            "Selecciona un ejercicio primero.",
-            "Sin selección",
-            JOptionPane.WARNING_MESSAGE);
-    }
     }//GEN-LAST:event_btn_addActionPerformed
+
+    private void AñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AñadirActionPerformed
+        // TODO add your handling code here:
+        String nombre = jTextField1.getText().trim();
+        String descripcion = jTextArea1.getText().trim();
+        String objetivo = jTextArea2.getText().trim();
+        Usuario usuarioSeleccionado = (Usuario) comboUsuario.getSelectedItem();
+
+        if (nombre.isEmpty() || descripcion.isEmpty() || objetivo.isEmpty() || usuarioSeleccionado == null) {
+            JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos y se debe seleccionar un usuario.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            // Insertar la rutina
+            Rutina rutina = new Rutina(
+                    usuarioSeleccionado.getIdUsuario(),
+                    nombre,
+                    descripcion,
+                    objetivo,
+                    LocalDate.now()
+            );
+            RutinaDAO.getInstance().insert(rutina);
+
+            // Obtener la rutina recién insertada por nombre y usuario
+            List<Rutina> rutinas = RutinaDAO.getInstance().selectAll();
+            Rutina rutinaInsertada = null;
+            for (Rutina r : rutinas) {
+                if (r.getNombre().equals(nombre) && r.getIdUsuario() == usuarioSeleccionado.getIdUsuario()) {
+                    rutinaInsertada = r;
+                    break;
+                }
+            }
+
+            if (rutinaInsertada == null) {
+                JOptionPane.showMessageDialog(this, "No se pudo encontrar la rutina recién insertada.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Insertar los ejercicios asociados
+            int orden = Integer.parseInt(jTextField2.getText().trim());
+            int series = Integer.parseInt(jTextField3.getText().trim());
+            String repeticiones = jTextField4.getText().trim();
+
+            for (int i = 0; i < listModel.getSize(); i++) {
+                Ejercicio ejercicio = listModel.getElementAt(i);
+                RutinaEjercicio re = new RutinaEjercicio(rutinaInsertada.getIdRutina(), ejercicio.getIdEjercicio(), orden, series, repeticiones);
+                RutinaEjercicioDAO.getInstance().insert(re);
+            }
+
+            JOptionPane.showMessageDialog(this, "Rutina y ejercicios añadidos correctamente.");
+            dispose();
+
+        } catch (HeadlessException | NumberFormatException | SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al añadir la rutina: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_AñadirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -319,10 +385,10 @@ public class AñadirRutina extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Añadir;
     private javax.swing.JButton btn_add;
     private javax.swing.JComboBox<Usuario> comboUsuario;
     private javax.swing.JComboBox<Ejercicio> combo_ejercicio;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

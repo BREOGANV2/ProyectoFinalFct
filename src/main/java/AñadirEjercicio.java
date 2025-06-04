@@ -3,9 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
-
+import java.awt.HeadlessException;
 import java.io.File;
+import java.sql.SQLException;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.plaf.FileChooserUI;
 import javax.swing.plaf.basic.BasicFileChooserUI;
 
@@ -14,8 +16,8 @@ import javax.swing.plaf.basic.BasicFileChooserUI;
  * @author HREF DIGITAL
  */
 public class AñadirEjercicio extends javax.swing.JFrame {
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AñadirEjercicio.class.getName());
-    
 
     /**
      * Creates new form AñadirEjercicio
@@ -92,7 +94,12 @@ public class AñadirEjercicio extends javax.swing.JFrame {
         gridBagConstraints.weighty = 0.25;
         getContentPane().add(jTextField4, gridBagConstraints);
 
-        jButton1.setText("jButton1");
+        jButton1.setText("Añadir");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 5;
@@ -125,17 +132,54 @@ public class AñadirEjercicio extends javax.swing.JFrame {
 
     private void btn_fileSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_fileSelectorActionPerformed
         // TODO add your handling code here:
-         JFileChooser fileChooser = new JFileChooser();
-    
-    int result = fileChooser.showOpenDialog(this);
-    
-    if (result == JFileChooser.APPROVE_OPTION) {
-        File selectedFile = fileChooser.getSelectedFile();
-        rutaArchivoSeleccionado = selectedFile.getAbsolutePath();  // guarda la ruta globalmente
+        JFileChooser fileChooser = new JFileChooser();
 
-        System.out.println("Ruta seleccionada: " + rutaArchivoSeleccionado);
-    }
+        int result = fileChooser.showOpenDialog(this);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            rutaArchivoSeleccionado = selectedFile.getAbsolutePath();  // guarda la ruta globalmente
+
+            System.out.println("Ruta seleccionada: " + rutaArchivoSeleccionado);
+        }
     }//GEN-LAST:event_btn_fileSelectorActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        String nombre = jTextField1.getText().trim();
+        String grupoMuscular = jTextField4.getText().trim(); // Este es el segundo campo
+        String descripcion = jTextArea1.getText().trim();
+        String urlImagen = rutaArchivoSeleccionado; // viene del file selector
+
+        // Validaciones
+        if (nombre.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (grupoMuscular.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El grupo muscular no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (descripcion.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La descripción no puede estar vacía.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (urlImagen == null || urlImagen.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debes seleccionar una imagen.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Ejercicio ejercicio = new Ejercicio(nombre, grupoMuscular, descripcion, urlImagen);
+
+        try {
+            EjercicioDAO.getInstance().insert(ejercicio);
+            JOptionPane.showMessageDialog(this, "Ejercicio añadido correctamente.");
+            dispose(); // Cierra la ventana
+        } catch (HeadlessException | SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al insertar el ejercicio.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

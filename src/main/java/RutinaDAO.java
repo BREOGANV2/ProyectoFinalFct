@@ -29,6 +29,27 @@ public class RutinaDAO {
             stmt.executeUpdate();
         }
     }
+    
+    public Rutina selectById(int id) throws SQLException {
+    String sql = "SELECT * FROM Rutinas WHERE id_rutina = ?";
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setInt(1, id);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return new Rutina(
+                    rs.getInt("id_rutina"),
+                    rs.getInt("id_usuario"),
+                    rs.getString("nombre"),
+                    rs.getString("descripcion"),
+                    rs.getString("objetivo"),
+                    rs.getDate("fecha_creacion").toLocalDate()
+                );
+            } else {
+                return null;
+            }
+        }
+    }
+}
 
     public void update(Rutina rutina) throws SQLException {
         String sql = "UPDATE Rutinas SET id_usuario=?, nombre=?, descripcion=?, objetivo=?, fecha_creacion=? WHERE id_rutina=?";

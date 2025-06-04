@@ -3,25 +3,60 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+
 /**
  *
  * @author HREF DIGITAL
  */
 public class EliminacionRutinaUsuario extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(EliminacionRutinaUsuario.class.getName());
 
     /**
      * Creates new form EliminacionUsuario
      */
     public EliminacionRutinaUsuario() {
-        
+
         initComponents();
-        modelTabla=table.getModel();
+        modelTabla = new DefaultTableModel(
+                new String[]{"Rutina", "Fecha", "Duración", "Notas"}, 0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        table.setModel(modelTabla);
+        cargarRutinasEjecutadas();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        
+    }
+
+    private void cargarRutinasEjecutadas() {
+        try {
+            modelTabla.setRowCount(0);
+            List<RutinaEjecucion> lista = RutinaEjecucionDAO.getInstance().selectAll();
+            for (RutinaEjecucion re : lista) {
+                String nombreRutina = RutinaDAO.getInstance().selectById(re.getIdRutina()).getNombre();
+
+                modelTabla.addRow(new Object[]{
+                    nombreRutina,
+                    re.getFechaEjecucion(),
+                    re.getDuracionMinutos(),
+                    re.getNotas(),
+                    re // objeto oculto para eliminar
+                });
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al cargar las ejecuciones", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -72,6 +107,11 @@ public class EliminacionRutinaUsuario extends javax.swing.JFrame {
         jPanel1.add(jScrollPane1, gridBagConstraints);
 
         jButton1.setText("Eliminar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton1, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -86,11 +126,45 @@ public class EliminacionRutinaUsuario extends javax.swing.JFrame {
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
         // TODO add your handling code here:
         int row = table.getSelectedRow();
-if (row >= 0) {
-    table.setRowSelectionInterval(row, row);    // selecciona la fila
-    table.setColumnSelectionInterval(0, 0);     // fuerza que solo la columna 0 quede seleccionada
-}
+        if (row >= 0) {
+            table.setRowSelectionInterval(row, row);    // selecciona la fila
+            table.setColumnSelectionInterval(0, 0);     // fuerza que solo la columna 0 quede seleccionada
+        }
     }//GEN-LAST:event_tableMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        int fila = table.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona una ejecución para eliminar", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        RutinaEjecucion ejecucion = (RutinaEjecucion) modelTabla.getValueAt(fila, 4); // columna 4 es el objeto
+
+        int confirmacion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Seguro que deseas eliminar esta ejecución de rutina?",
+                "Confirmación",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirmacion != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        try (Connection conn = DatabaseManager.getInstance().getConnection(); PreparedStatement ps = conn.prepareStatement("DELETE FROM Rutina_Ejecuciones WHERE id_rutina_ejecucion = ?")) {
+            ps.setInt(1, ejecucion.getIdEjecucion());
+            ps.executeUpdate();
+
+            JOptionPane.showMessageDialog(this, "Ejecución eliminada correctamente.");
+            cargarRutinasEjecutadas();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al eliminar la ejecución", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -123,5 +197,5 @@ if (row >= 0) {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
-    private TableModel modelTabla;
+    private DefaultTableModel modelTabla;
 }

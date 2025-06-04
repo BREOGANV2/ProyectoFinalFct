@@ -3,25 +3,58 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+
 /**
  *
  * @author HREF DIGITAL
  */
 public class EliminacionEjercicio extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(EliminacionEjercicio.class.getName());
 
     /**
      * Creates new form EliminacionUsuario
      */
     public EliminacionEjercicio() {
-        
-        initComponents();
-        modelTabla=table.getModel();
+
+        initComponents();  // necesario para inicializar los componentes gráficos (aunque no te lo muestro aquí)
+        modelTabla = new DefaultTableModel(
+                new String[]{"Nombre", "Grupo Muscular", "Descripción", "url_imagen"}, 0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        table.setModel(modelTabla);
+        cargarEjercicios();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        
+
+    }
+
+    private void cargarEjercicios() {
+        try {
+            modelTabla.setRowCount(0);
+            List<Ejercicio> ejercicios = EjercicioDAO.getInstance().selectAll();
+            for (Ejercicio e : ejercicios) {
+                modelTabla.addRow(new Object[]{
+                    e, // se muestra el nombre (gracias al toString)
+                    e.getGrupoMuscular(),
+                    e.getDescripcion(),
+                    e.getUrlImagen()
+                });
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al cargar ejercicios", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -72,6 +105,11 @@ public class EliminacionEjercicio extends javax.swing.JFrame {
         jPanel1.add(jScrollPane1, gridBagConstraints);
 
         jButton1.setText("Eliminar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton1, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -86,11 +124,76 @@ public class EliminacionEjercicio extends javax.swing.JFrame {
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
         // TODO add your handling code here:
         int row = table.getSelectedRow();
-if (row >= 0) {
-    table.setRowSelectionInterval(row, row);    // selecciona la fila
-    table.setColumnSelectionInterval(0, 0);     // fuerza que solo la columna 0 quede seleccionada
-}
+        if (row >= 0) {
+            table.setRowSelectionInterval(row, row);
+            table.setColumnSelectionInterval(0, 0);
+        }
     }//GEN-LAST:event_tableMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+         int fila = table.getSelectedRow();
+    if (fila == -1) {
+        JOptionPane.showMessageDialog(this, "Selecciona un ejercicio para eliminar", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    Ejercicio ejercicio = (Ejercicio) modelTabla.getValueAt(fila, 0);
+
+    int confirmacion = JOptionPane.showConfirmDialog(
+            this,
+            "¿Seguro que deseas eliminar el ejercicio '" + ejercicio.getNombre() + "'?",
+            "Confirmación",
+            JOptionPane.YES_NO_OPTION
+    );
+
+    if (confirmacion != JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    Connection conn = null;
+
+    try {
+        conn = DatabaseManager.getInstance().getConnection();
+        conn.setAutoCommit(false);  // Iniciar transacción
+
+        // 1. Eliminar de Rutina_Ejercicios
+        try (PreparedStatement stmt1 = conn.prepareStatement(
+                "DELETE FROM Rutina_Ejercicios WHERE id_ejercicio = ?")) {
+            stmt1.setInt(1, ejercicio.getIdEjercicio());
+            stmt1.executeUpdate();
+        }
+
+        // 2. Eliminar de Ejercicios
+        try (PreparedStatement stmt2 = conn.prepareStatement(
+                "DELETE FROM Ejercicios WHERE id_ejercicio = ?")) {
+            stmt2.setInt(1, ejercicio.getIdEjercicio());
+            stmt2.executeUpdate();
+        }
+
+        conn.commit();
+        JOptionPane.showMessageDialog(this, "Ejercicio eliminado correctamente.");
+        cargarEjercicios();  // refrescar la tabla
+
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        if (conn != null) {
+            try {
+                conn.rollback();
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+        }
+        JOptionPane.showMessageDialog(this, "Error al eliminar ejercicio", "Error", JOptionPane.ERROR_MESSAGE);
+    } finally {
+        if (conn != null) {
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -123,5 +226,5 @@ if (row >= 0) {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
-    private TableModel modelTabla;
+    private DefaultTableModel modelTabla;
 }

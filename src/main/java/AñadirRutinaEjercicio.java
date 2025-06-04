@@ -1,15 +1,17 @@
+
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
-
 /**
  *
  * @author HREF DIGITAL
  */
 public class AñadirRutinaEjercicio extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AñadirRutinaEjercicio.class.getName());
 
     /**
@@ -17,6 +19,18 @@ public class AñadirRutinaEjercicio extends javax.swing.JFrame {
      */
     public AñadirRutinaEjercicio() {
         initComponents();
+        // Bloquear edición directa en las tablas
+        tablaRutina.setDefaultEditor(Object.class, null);
+        tablaEjercicio.setDefaultEditor(Object.class, null);
+
+// Forzar selección de fila completa y solo una fila a la vez
+        tablaRutina.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tablaRutina.setRowSelectionAllowed(true);
+        tablaRutina.setColumnSelectionAllowed(false);
+
+        tablaEjercicio.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tablaEjercicio.setRowSelectionAllowed(true);
+        tablaEjercicio.setColumnSelectionAllowed(false);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
@@ -32,16 +46,16 @@ public class AñadirRutinaEjercicio extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaRutina = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tablaEjercicio = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        add_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(500, 500));
@@ -53,7 +67,7 @@ public class AñadirRutinaEjercicio extends javax.swing.JFrame {
         jPanel1Layout.rowHeights = new int[] {0, 16, 0, 16, 0, 16, 0, 16, 0, 16, 0, 16, 0};
         jPanel1.setLayout(jPanel1Layout);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaRutina.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -64,8 +78,8 @@ public class AñadirRutinaEjercicio extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane1.setViewportView(jTable1);
+        tablaRutina.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(tablaRutina);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -75,7 +89,7 @@ public class AñadirRutinaEjercicio extends javax.swing.JFrame {
         gridBagConstraints.weighty = 1.0;
         jPanel1.add(jScrollPane1, gridBagConstraints);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tablaEjercicio.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -86,8 +100,8 @@ public class AñadirRutinaEjercicio extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jTable2.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane2.setViewportView(jTable2);
+        tablaEjercicio.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane2.setViewportView(tablaEjercicio);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -139,14 +153,19 @@ public class AñadirRutinaEjercicio extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(jLabel3, gridBagConstraints);
 
-        jButton1.setText("jButton1");
+        add_btn.setText("Añadir");
+        add_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                add_btnActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 12;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weightx = 0.25;
         gridBagConstraints.weighty = 0.25;
-        jPanel1.add(jButton1, gridBagConstraints);
+        jPanel1.add(add_btn, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -156,6 +175,49 @@ public class AñadirRutinaEjercicio extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void add_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_btnActionPerformed
+        // TODO add your handling code here:
+        int filaRutina = tablaRutina.getSelectedRow();
+        int filaEjercicio = tablaEjercicio.getSelectedRow();
+
+        if (filaRutina == -1 || filaEjercicio == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona una rutina y un ejercicio", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            // Asume que la tabla tiene objetos Rutina/Ejercicio en la primera columna
+            Rutina rutina = (Rutina) tablaRutina.getValueAt(filaRutina, 0);
+            Ejercicio ejercicio = (Ejercicio) tablaEjercicio.getValueAt(filaEjercicio, 0);
+
+            int orden = Integer.parseInt(jTextField1.getText().trim());
+            int series = Integer.parseInt(jTextField2.getText().trim());
+            String repeticiones = jTextField3.getText().trim();
+
+            if (repeticiones.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Especifica las repeticiones", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            RutinaEjercicio re = new RutinaEjercicio(
+                    rutina.getIdRutina(),
+                    ejercicio.getIdEjercicio(),
+                    orden,
+                    series,
+                    repeticiones
+            );
+
+            RutinaEjercicioDAO.getInstance().insert(re);
+            JOptionPane.showMessageDialog(this, "Ejercicio añadido a la rutina correctamente.");
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Orden y series deben ser números enteros válidos", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al añadir el ejercicio a la rutina", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_add_btnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -183,17 +245,17 @@ public class AñadirRutinaEjercicio extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton add_btn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
+    private javax.swing.JTable tablaEjercicio;
+    private javax.swing.JTable tablaRutina;
     // End of variables declaration//GEN-END:variables
 }
