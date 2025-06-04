@@ -69,4 +69,36 @@ public class RutinaEjercicioDAO {
         }
         return list;
     }
+
+   public void deleteByRutina(int idRutina) throws SQLException {
+    String sql = "DELETE FROM Rutina_Ejercicios WHERE id_rutina = ?";
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setInt(1, idRutina);
+        stmt.executeUpdate();
+    }
+}
+   
+   public List<RutinaEjercicio> selectByRutina(int idRutina) throws SQLException {
+    List<RutinaEjercicio> lista = new ArrayList<>();
+
+    String sql = "SELECT * FROM Rutina_Ejercicios WHERE id_rutina = ?";
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setInt(1, idRutina);
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                RutinaEjercicio re = new RutinaEjercicio(
+                    rs.getInt("id_rutina"),
+                    rs.getInt("id_ejercicio"),
+                    rs.getInt("orden"),
+                    rs.getInt("series"),
+                    rs.getString("repeticiones")
+                );
+                lista.add(re);
+            }
+        }
+    }
+
+    return lista;
+}
+
 }

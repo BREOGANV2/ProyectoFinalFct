@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
-
 import java.awt.HeadlessException;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -21,37 +20,26 @@ import javax.swing.table.TableModel;
  * @author HREF DIGITAL
  */
 public class AñadirRutinaEjecuciones extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AñadirRutinaEjecuciones.class.getName());
 
     /**
      * Creates new form AñadirRutinaEjecuciones
      */
     public AñadirRutinaEjecuciones() {
-        
+
         initComponents();
-        tableModel=tabla.getModel();
+        tableModel = tabla.getModel();
         try {
+            tabla.setRowSelectionAllowed(true);     // Permite seleccionar filas
+tabla.setColumnSelectionAllowed(false); // Desactiva selección individual de columnas
+
             cargarRutinasEnTabla();
         } catch (SQLException ex) {
             System.getLogger(AñadirRutinaEjecuciones.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
-    public void rellenarTablaRutinas() {
-    List<RutinaEjecucion> rutinas = RutinaEjecucionDAO.obtenerTodas();
-    DefaultTableModel modelo = (DefaultTableModel) tablaRutinas.getModel();
-    modelo.setRowCount(0);  // Limpiar la tabla antes de agregar
-
-    for (RutinaEjecucion rutina : rutinas) {
-        modelo.addRow(new Object[]{
-            rutina.getId(),
-            rutina.getNombre(),
-            rutina.getDescripcion(),
-            rutina.getFechaEjecucion()
-        });
-    }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -145,6 +133,14 @@ public class AñadirRutinaEjecuciones extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+        tabla.setToolTipText("");
+        tabla.setCellSelectionEnabled(true);
+        tabla.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tabla.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tabla);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -190,62 +186,70 @@ public class AñadirRutinaEjecuciones extends javax.swing.JFrame {
 
     private void btn_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addActionPerformed
         // TODO add your handling code here:
-        
+
         int filaSeleccionada = tabla.getSelectedRow();
-    if (filaSeleccionada == -1) {
-        JOptionPane.showMessageDialog(this, "Selecciona una rutina.", "Error", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona una rutina.", "Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-    // La rutina debería estar almacenada como objeto en la primera columna (ajusta si es diferente)
-    Rutina rutinaSeleccionada = (Rutina) tabla.getValueAt(filaSeleccionada, 0);
+        // La rutina debería estar almacenada como objeto en la primera columna (ajusta si es diferente)
+        Rutina rutinaSeleccionada = (Rutina) tabla.getValueAt(filaSeleccionada, 0);
 
-    Date fecha = obtenerFechaDesdeTextField(txtfecha);
-    if (fecha == null) {
-        JOptionPane.showMessageDialog(this, "Introduce una fecha válida (dd/MM/yyyy).", "Error", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
+        Date fecha = obtenerFechaDesdeTextField(txtfecha);
+        if (fecha == null) {
+            JOptionPane.showMessageDialog(this, "Introduce una fecha válida (dd/MM/yyyy).", "Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-    String duracionStr = jTextField2.getText().trim();
-    Integer duracionMinutos = null;
-    try {
-        duracionMinutos = Integer.parseInt(duracionStr);
-        if (duracionMinutos <= 0) throw new NumberFormatException();
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Duración inválida. Debe ser un número positivo (en minutos).", "Error", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
+        String duracionStr = jTextField2.getText().trim();
+        Integer duracionMinutos = null;
+        try {
+            duracionMinutos = Integer.parseInt(duracionStr);
+            if (duracionMinutos <= 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Duración inválida. Debe ser un número positivo (en minutos).", "Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-    String notas = jTextArea1.getText().trim();
+        String notas = jTextArea1.getText().trim();
 
-    try {
-        LocalDateTime fechaEjecucion = fecha.toInstant()
-                                            .atZone(java.time.ZoneId.systemDefault())
-                                            .toLocalDateTime();
+        try {
+            LocalDateTime fechaEjecucion = fecha.toInstant()
+                    .atZone(java.time.ZoneId.systemDefault())
+                    .toLocalDateTime();
 
-        RutinaEjecucion ejecucion = new RutinaEjecucion(
-            rutinaSeleccionada.getIdRutina(),
-            fechaEjecucion,
-            duracionMinutos,
-            notas
-        );
+            RutinaEjecucion ejecucion = new RutinaEjecucion(
+                    rutinaSeleccionada.getIdRutina(),
+                    fechaEjecucion,
+                    duracionMinutos,
+                    notas
+            );
 
-        // Aquí deberías guardar con el DAO correspondiente
-        RutinaEjecucionDAO.getInstance().insert(ejecucion);
+            // Aquí deberías guardar con el DAO correspondiente
+            RutinaEjecucionDAO.getInstance().insert(ejecucion);
 
-        JOptionPane.showMessageDialog(this, "Ejecución guardada correctamente.");
-        dispose();
+            JOptionPane.showMessageDialog(this, "Ejecución guardada correctamente.");
+            dispose();
 
-    } catch (HeadlessException | SQLException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error al guardar la ejecución.", "Error", JOptionPane.ERROR_MESSAGE);
-    }
+        } catch (HeadlessException | SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al guardar la ejecución.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btn_addActionPerformed
+
+    private void tablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMouseClicked
+        // TODO add your handling code here:
+       
+       
+    }//GEN-LAST:event_tablaMouseClicked
 
     /**
      * @param args the command line arguments
      */
-     public static Date obtenerFechaDesdeTextField(JTextField textField) {
+    public static Date obtenerFechaDesdeTextField(JTextField textField) {
         String textoFecha = textField.getText().trim();
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         formato.setLenient(false); // Para que no acepte fechas inválidas como 32/01/2023
@@ -256,21 +260,23 @@ public class AñadirRutinaEjecuciones extends javax.swing.JFrame {
             System.out.println("Fecha inválida: " + textoFecha);
             return null;
         }
-}
-     private void cargarRutinasEnTabla() throws SQLException {
-    DefaultTableModel model = (DefaultTableModel) tabla.getModel();
-    model.setRowCount(0); // Limpia la tabla
-
-    List<Rutina> rutinas = RutinaDAO.getInstance().selectAll(); // Usa tu DAO real aquí
-    for (Rutina r : rutinas) {
-        model.addRow(new Object[] {
-            r, // Esto es clave para luego recuperar el objeto completo
-            r.getDescripcion(),
-            r.getObjetivo(),
-            r.getFechaCreacion().toString()
-        });
     }
-}
+
+    private void cargarRutinasEnTabla() throws SQLException {
+        DefaultTableModel model = (DefaultTableModel) tabla.getModel();
+        model.setRowCount(0); // Limpia la tabla
+
+        List<Rutina> rutinas = RutinaDAO.getInstance().selectAll(); // Usa tu DAO real aquí
+        for (Rutina r : rutinas) {
+            model.addRow(new Object[]{
+                r, // Esto es clave para luego recuperar el objeto completo
+                r.getDescripcion(),
+                r.getObjetivo(),
+                r.getFechaCreacion().toString()
+            });
+        }
+    }
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -309,5 +315,3 @@ public class AñadirRutinaEjecuciones extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     private TableModel tableModel;
 }
-
-

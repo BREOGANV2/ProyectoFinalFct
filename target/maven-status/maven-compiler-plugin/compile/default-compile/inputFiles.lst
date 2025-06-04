@@ -9,6 +9,7 @@ D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\RutinaEjecucionDAO.java
 D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\VerEjercicios.java
 D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\EliminacionEjercicio.java
 D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\ModificarRutinas.java
+D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\ModificarRutinaEjecucion.java
 D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\AñadirUsuario.java
 D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\AñadirRutina.java
 D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\DatabaseManager.java
@@ -19,12 +20,12 @@ D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\EliminacionRutinaEjercicio.java
 D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\AñadirRutinaEjercicio.java
 D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\ModificarEjercicio.java
 D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\EliminacionUsuario.java
-D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\VerRutinasUsuarios.java
+D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\VerRutinasEjecucion.java
 D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\VerRutinasEjercicios.java
 D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\PantallaPrincipal.java
 D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\Ejercicio.java
-D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\EliminacionRutinaUsuario.java
 D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\UsuarioDAO.java
+D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\EliminacionRutinaEjecucion.java
 D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\RutinaEjercicio.java
 D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\Rutina.java
 D:\2_DAM\TFG\ProyectoFinalFct\src\main\java\RutinaEjercicioDAO.java

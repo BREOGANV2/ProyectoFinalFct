@@ -402,6 +402,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
     private void btnModificarRutinaEjecucionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarRutinaEjecucionActionPerformed
         // TODO add your handling code here:
+        ModificarRutinaEjecucion ver=new ModificarRutinaEjecucion();
+        ver.setVisible(true);
     }//GEN-LAST:event_btnModificarRutinaEjecucionActionPerformed
 
     /**

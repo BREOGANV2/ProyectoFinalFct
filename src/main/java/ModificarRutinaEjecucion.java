@@ -1,6 +1,9 @@
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -19,6 +22,7 @@ public class ModificarRutinaEjecucion extends javax.swing.JFrame {
      */
     public ModificarRutinaEjecucion() {
         initComponents();
+        cargarTabla();
     }
 
     private void cargarTabla() {
@@ -254,7 +258,9 @@ public class ModificarRutinaEjecucion extends javax.swing.JFrame {
     private javax.swing.JTable tablaEjecuciones;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
-    private List<RutinaEjecucion> ejecuciones;
+    private DefaultTableModel tableModel;
+private List<RutinaEjecucion> ejecuciones; // para vincular cada fila con su objeto
+private RutinaEjecucion ejecucionSeleccionada;
     private int selectedIndex = -1;
-
+   
 }

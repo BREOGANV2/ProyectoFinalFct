@@ -31,9 +31,24 @@ public class AñadirRutina extends javax.swing.JFrame {
         lista.setModel(listModel);
         combo_ejercicio.setModel(comboBoxModel);
         comboUsuario.setModel(comboBoxModelUsuarios);
+        
         Ejercicio e = new Ejercicio("Prueba", "Biceps", "AAAA", "SDADASDASD");
         comboBoxModel.addElement(e);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        try {
+    // Cargar usuarios en el combo
+    for (Usuario u : UsuarioDAO.getInstance().selectAll()) {
+        comboBoxModelUsuarios.addElement(u);
+    }
+
+    // Cargar ejercicios en el combo
+    for (Ejercicio i : EjercicioDAO.getInstance().selectAll()) {
+        comboBoxModel.addElement(i);
+    }
+} catch (SQLException i) {
+    i.printStackTrace();
+    JOptionPane.showMessageDialog(this, "Error cargando datos iniciales.", "Error", JOptionPane.ERROR_MESSAGE);
+}
     }
 
     /**
@@ -66,9 +81,9 @@ public class AñadirRutina extends javax.swing.JFrame {
         t = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        txtOrden = new javax.swing.JTextField();
+        txtseries = new javax.swing.JTextField();
+        txtrepeticiones = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(500, 500));
@@ -148,7 +163,7 @@ public class AñadirRutina extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(jLabel4, gridBagConstraints);
 
-        Añadir.setText("jButton1");
+        Añadir.setText("Añadir");
         Añadir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AñadirActionPerformed(evt);
@@ -233,19 +248,19 @@ public class AñadirRutina extends javax.swing.JFrame {
         gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanel1.add(jTextField2, gridBagConstraints);
+        jPanel1.add(txtOrden, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanel1.add(jTextField3, gridBagConstraints);
+        jPanel1.add(txtseries, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 12;
         gridBagConstraints.gridwidth = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanel1.add(jTextField4, gridBagConstraints);
+        jPanel1.add(txtrepeticiones, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -280,83 +295,74 @@ public class AñadirRutina extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void btn_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addActionPerformed
-        // Obtener el elemento seleccionado del combo
-        Ejercicio ejercicioSeleccionado = (Ejercicio) combo_ejercicio.getSelectedItem();
+         Ejercicio ejercicioSeleccionado = (Ejercicio) combo_ejercicio.getSelectedItem();
 
-        if (ejercicioSeleccionado != null) {
-            // Verificar si ya está en la lista
-            if (!listModel.contains(ejercicioSeleccionado)) {
+    if (ejercicioSeleccionado != null) {
+        if (!listModel.contains(ejercicioSeleccionado)) {
+            try {
+                int orden = Integer.parseInt(txtOrden.getText().trim());
+                int series = Integer.parseInt(txtseries.getText().trim());
+                String repeticiones = txtrepeticiones.getText().trim();
+
+                // Crear y almacenar RutinaEjercicio temporal
+                RutinaEjercicio re = new RutinaEjercicio(0, ejercicioSeleccionado.getIdEjercicio(), orden, series, repeticiones);
+                rutinaEjerciciosTemporales.add(re);
+
                 listModel.addElement(ejercicioSeleccionado);
-            } else {
-                JOptionPane.showMessageDialog(this,
-                        "Este ejercicio ya está en la lista.",
-                        "Elemento duplicado",
-                        JOptionPane.WARNING_MESSAGE);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Orden, series y repeticiones deben ser números.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this,
-                    "Selecciona un ejercicio primero.",
-                    "Sin selección",
-                    JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Este ejercicio ya está en la lista.", "Elemento duplicado", JOptionPane.WARNING_MESSAGE);
         }
+    } else {
+        JOptionPane.showMessageDialog(this, "Selecciona un ejercicio primero.", "Sin selección", JOptionPane.WARNING_MESSAGE);
+    }
     }//GEN-LAST:event_btn_addActionPerformed
 
     private void AñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AñadirActionPerformed
-        // TODO add your handling code here:
-        String nombre = jTextField1.getText().trim();
-        String descripcion = jTextArea1.getText().trim();
-        String objetivo = jTextArea2.getText().trim();
-        Usuario usuarioSeleccionado = (Usuario) comboUsuario.getSelectedItem();
+       String nombre = jTextField1.getText().trim();
+    String descripcion = jTextArea1.getText().trim();
+    String objetivo = jTextArea2.getText().trim();
+    Usuario usuarioSeleccionado = (Usuario) comboUsuario.getSelectedItem();
 
-        if (nombre.isEmpty() || descripcion.isEmpty() || objetivo.isEmpty() || usuarioSeleccionado == null) {
-            JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos y se debe seleccionar un usuario.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    // Validaciones
+    if (nombre.isEmpty() || descripcion.isEmpty() || objetivo.isEmpty() || usuarioSeleccionado == null) {
+        JOptionPane.showMessageDialog(this, "Por favor, completa todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        try {
-            // Insertar la rutina
-            Rutina rutina = new Rutina(
-                    usuarioSeleccionado.getIdUsuario(),
-                    nombre,
-                    descripcion,
-                    objetivo,
-                    LocalDate.now()
+    if (rutinaEjerciciosTemporales.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Debes añadir al menos un ejercicio con sus datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    try {
+        // Crear rutina e insertar devolviendo el ID generado
+        Rutina rutina = new Rutina(0, usuarioSeleccionado.getIdUsuario(), nombre, descripcion, objetivo, LocalDate.now());
+        int idRutina = RutinaDAO.getInstance().insertAndReturnId(rutina);
+        Rutina rutinaInsertada = new Rutina(idRutina, rutina.getIdUsuario(), rutina.getNombre(), rutina.getDescripcion(), rutina.getObjetivo(), rutina.getFechaCreacion());
+
+        // Insertar todos los RutinaEjercicio temporales con el ID correcto
+        for (RutinaEjercicio reTemp : rutinaEjerciciosTemporales) {
+            RutinaEjercicio reFinal = new RutinaEjercicio(
+                rutinaInsertada.getIdRutina(),
+                reTemp.getIdEjercicio(),
+                reTemp.getOrden(),
+                reTemp.getSeries(),
+                reTemp.getRepeticiones()
             );
-            RutinaDAO.getInstance().insert(rutina);
-
-            // Obtener la rutina recién insertada por nombre y usuario
-            List<Rutina> rutinas = RutinaDAO.getInstance().selectAll();
-            Rutina rutinaInsertada = null;
-            for (Rutina r : rutinas) {
-                if (r.getNombre().equals(nombre) && r.getIdUsuario() == usuarioSeleccionado.getIdUsuario()) {
-                    rutinaInsertada = r;
-                    break;
-                }
-            }
-
-            if (rutinaInsertada == null) {
-                JOptionPane.showMessageDialog(this, "No se pudo encontrar la rutina recién insertada.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            // Insertar los ejercicios asociados
-            int orden = Integer.parseInt(jTextField2.getText().trim());
-            int series = Integer.parseInt(jTextField3.getText().trim());
-            String repeticiones = jTextField4.getText().trim();
-
-            for (int i = 0; i < listModel.getSize(); i++) {
-                Ejercicio ejercicio = listModel.getElementAt(i);
-                RutinaEjercicio re = new RutinaEjercicio(rutinaInsertada.getIdRutina(), ejercicio.getIdEjercicio(), orden, series, repeticiones);
-                RutinaEjercicioDAO.getInstance().insert(re);
-            }
-
-            JOptionPane.showMessageDialog(this, "Rutina y ejercicios añadidos correctamente.");
-            dispose();
-
-        } catch (HeadlessException | NumberFormatException | SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error al añadir la rutina: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            RutinaEjercicioDAO.getInstance().insert(reFinal);
         }
+
+        JOptionPane.showMessageDialog(this, "Rutina guardada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        dispose();
+
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this, "Series y repeticiones deben ser números enteros.", "Error", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_AñadirActionPerformed
 
     /**
@@ -403,13 +409,15 @@ public class AñadirRutina extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JList<Ejercicio> lista;
     private javax.swing.JLabel t;
+    private javax.swing.JTextField txtOrden;
+    private javax.swing.JTextField txtrepeticiones;
+    private javax.swing.JTextField txtseries;
     // End of variables declaration//GEN-END:variables
     private DefaultListModel<Ejercicio> listModel;
     private DefaultComboBoxModel<Ejercicio> comboBoxModel;
     private DefaultComboBoxModel<Usuario> comboBoxModelUsuarios;
+    private final List<RutinaEjercicio> rutinaEjerciciosTemporales = new java.util.ArrayList<>();
+
 }
