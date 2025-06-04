@@ -330,7 +330,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
     private void rutinaUsuarioEliminationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rutinaUsuarioEliminationActionPerformed
         // TODO add your handling code here:
-        EliminacionRutinaUsuario eliminacion=new EliminacionRutinaUsuario();
+        EliminacionRutinaEjecucion eliminacion=new EliminacionRutinaEjecucion();
         eliminacion.setVisible(true);
     }//GEN-LAST:event_rutinaUsuarioEliminationActionPerformed
 
@@ -354,7 +354,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
     private void btn_verRutinaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_verRutinaUsuarioActionPerformed
         // TODO add your handling code here:
-        VerRutinasUsuarios ver=new VerRutinasUsuarios();
+        VerRutinasEjecucion ver=new VerRutinasEjecucion();
         ver.setVisible(true);
     }//GEN-LAST:event_btn_verRutinaUsuarioActionPerformed
 

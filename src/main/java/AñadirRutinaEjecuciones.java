@@ -38,6 +38,20 @@ public class AñadirRutinaEjecuciones extends javax.swing.JFrame {
         }
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
+    public void rellenarTablaRutinas() {
+    List<RutinaEjecucion> rutinas = RutinaEjecucionDAO.obtenerTodas();
+    DefaultTableModel modelo = (DefaultTableModel) tablaRutinas.getModel();
+    modelo.setRowCount(0);  // Limpiar la tabla antes de agregar
+
+    for (RutinaEjecucion rutina : rutinas) {
+        modelo.addRow(new Object[]{
+            rutina.getId(),
+            rutina.getNombre(),
+            rutina.getDescripcion(),
+            rutina.getFechaEjecucion()
+        });
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.

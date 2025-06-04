@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
-
+import java.util.List;
 import javax.swing.table.TableModel;
 
 /**
@@ -11,17 +11,53 @@ import javax.swing.table.TableModel;
  * @author HREF DIGITAL
  */
 public class ModificarUsuario extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ModificarUsuario.class.getName());
 
     /**
      * Creates new form ModificarUsuario
      */
     public ModificarUsuario() {
-        
+
         initComponents();
-        modeloTabla=table.getModel();
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+    setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+    cargarUsuariosEnTabla();         // Llena la tabla con los datos de la base
+    modeloTabla = table.getModel();  // Guarda el modelo (no obligatorio si no lo usas)
+    }
+
+    private void cargarUsuariosEnTabla() {
+        try {
+            List<Usuario> usuarios = UsuarioDAO.getInstance().selectAll();
+            String[] columnas = {"ID", "Nombre", "Edad", "Género", "Fecha"};
+            Object[][] datos = new Object[usuarios.size()][5];
+
+            for (int i = 0; i < usuarios.size(); i++) {
+                Usuario u = usuarios.get(i);
+                datos[i][0] = u.getIdUsuario();
+                datos[i][1] = u.getNombre();
+                datos[i][2] = u.getEdad();
+                datos[i][3] = u.getGenero();
+                datos[i][4] = u.getFechaRegistro();
+            }
+
+            javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(datos, columnas) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false; // Evita edición directa
+                }
+            };
+            table.setModel(model);
+
+            // Ocultar columna ID visualmente
+            table.getColumnModel().getColumn(0).setMinWidth(0);
+            table.getColumnModel().getColumn(0).setMaxWidth(0);
+            table.getColumnModel().getColumn(0).setWidth(0);
+
+        } catch (Exception e) {
+            logger.log(java.util.logging.Level.SEVERE, null, e);
+            javax.swing.JOptionPane.showMessageDialog(this, "Error al cargar usuarios: " + e.getMessage());
+        }
     }
 
     /**
@@ -42,7 +78,7 @@ public class ModificarUsuario extends javax.swing.JFrame {
         jSpinner1 = new javax.swing.JSpinner();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        add_button = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -63,6 +99,11 @@ public class ModificarUsuario extends javax.swing.JFrame {
                 "Nombre", "Edad", "Genero", "Fecha"
             }
         ));
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(table);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -109,11 +150,16 @@ public class ModificarUsuario extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(jLabel3, gridBagConstraints);
 
-        jButton1.setText("jButton1");
+        add_button.setText("Modificar");
+        add_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                add_buttonActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 4;
-        jPanel1.add(jButton1, gridBagConstraints);
+        jPanel1.add(add_button, gridBagConstraints);
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hombre", "Mujer", "Otro" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -132,6 +178,62 @@ public class ModificarUsuario extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void add_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_buttonActionPerformed
+        int fila = table.getSelectedRow();
+        if (fila == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un usuario de la tabla.");
+            return;
+        }
+
+        try {
+            int idUsuario = (int) table.getModel().getValueAt(fila, 0);
+            String nombreNuevo = jTextField1.getText();
+            int edadNueva = (Integer) jSpinner1.getValue();
+            String generoNuevo = (String) jComboBox1.getSelectedItem();
+
+            Usuario usuarioBD = UsuarioDAO.getInstance().selectById(idUsuario);
+            if (usuarioBD == null) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Usuario no encontrado.");
+                return;
+            }
+
+            boolean cambiado = !nombreNuevo.equals(usuarioBD.getNombre())
+                    || edadNueva != usuarioBD.getEdad()
+                    || !generoNuevo.equals(usuarioBD.getGenero());
+
+            if (!cambiado) {
+                javax.swing.JOptionPane.showMessageDialog(this, "No se han realizado cambios.");
+                return;
+            }
+
+            Usuario modificado = new Usuario(
+                    idUsuario,
+                    nombreNuevo,
+                    edadNueva,
+                    generoNuevo,
+                    java.time.LocalDate.now(),
+                    usuarioBD.getContraseña()
+            );
+
+            UsuarioDAO.getInstance().update(modificado);
+            javax.swing.JOptionPane.showMessageDialog(this, "Usuario actualizado con éxito.");
+            cargarUsuariosEnTabla();  // refrescar la tabla
+
+        } catch (Exception ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+            javax.swing.JOptionPane.showMessageDialog(this, "Error al modificar: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_add_buttonActionPerformed
+
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+        int fila = table.getSelectedRow();
+    if (fila >= 0) {
+        jTextField1.setText(table.getModel().getValueAt(fila, 1).toString());
+        jSpinner1.setValue(Integer.parseInt(table.getModel().getValueAt(fila, 2).toString()));
+        jComboBox1.setSelectedItem(table.getModel().getValueAt(fila, 3).toString());
+    }
+    }//GEN-LAST:event_tableMouseClicked
 
     /**
      * @param args the command line arguments
@@ -159,7 +261,7 @@ public class ModificarUsuario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton add_button;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

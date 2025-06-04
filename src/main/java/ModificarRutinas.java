@@ -222,24 +222,18 @@ public class ModificarRutinas extends javax.swing.JFrame {
         gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 16;
         jPanel1.add(jLabel7, gridBagConstraints);
-
-        jTextField2.setText("jTextField2");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 12;
         gridBagConstraints.gridwidth = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanel1.add(jTextField2, gridBagConstraints);
-
-        jTextField3.setText("jTextField3");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 14;
         gridBagConstraints.gridwidth = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanel1.add(jTextField3, gridBagConstraints);
-
-        jTextField4.setText("jTextField4");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 16;

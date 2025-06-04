@@ -15,14 +15,14 @@ import javax.swing.table.TableModel;
  *
  * @author HREF DIGITAL
  */
-public class VerRutinasUsuarios extends javax.swing.JFrame {
+public class VerRutinasEjecucion extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VerRutinasUsuarios.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VerRutinasEjecucion.class.getName());
 
     /**
      * Creates new form VerUsuarios
      */
-    public VerRutinasUsuarios() {
+    public VerRutinasEjecucion() {
     initComponents();
     String[] columnas = { "Rutina", "Fecha", "Duración (min)", "Notas" };
 table.setModel(new DefaultTableModel(columnas, 0));
@@ -143,7 +143,7 @@ modeloTabla = (DefaultTableModel) table.getModel();
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new VerRutinasUsuarios().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new VerRutinasEjecucion().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
