@@ -1,3 +1,8 @@
+
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
+import javax.swing.JOptionPane;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -300,6 +305,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jMenu1.setText("Help");
 
         jMenuItem1.setText("Ayuda");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem1);
 
         jMenuBar1.add(jMenu1);
@@ -405,6 +415,27 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         ModificarRutinaEjecucion ver=new ModificarRutinaEjecucion();
         ver.setVisible(true);
     }//GEN-LAST:event_btnModificarRutinaEjecucionActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+         try {
+        // Cargar el archivo helpset.hs desde la carpeta de recursos
+        ClassLoader cl = getClass().getClassLoader();
+        java.net.URL hsURL = HelpSet.findHelpSet(cl, "JavaHelp/helpset.hs");
+        HelpSet hs = new HelpSet(cl, hsURL);
+        HelpBroker hb = hs.createHelpBroker();
+
+        // Mostrar ayuda en una ventana independiente
+        hb.setDisplayed(true);
+
+        // O, si quieres mostrar ayuda contextual sobre un componente específico:
+        // hb.enableHelp(yourComponent, "uso", hs);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "No se pudo cargar la ayuda.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments

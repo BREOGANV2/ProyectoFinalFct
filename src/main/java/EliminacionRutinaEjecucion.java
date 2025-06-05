@@ -78,7 +78,7 @@ public class EliminacionRutinaEjecucion extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(500, 500));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Eliminacion de Rutina Usuario"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Eliminacion de Ejecucion de Rutina"));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         table.setModel(new javax.swing.table.DefaultTableModel(
