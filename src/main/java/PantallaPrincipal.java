@@ -400,7 +400,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
     private void btnModificarEjerciciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarEjerciciosActionPerformed
         // TODO add your handling code here:
-        ModificarEjercicio ver=new ModificarEjercicio();
+        ModificarEjercicio1 ver=new ModificarEjercicio1();
         ver.setVisible(true);
     }//GEN-LAST:event_btnModificarEjerciciosActionPerformed
 
