@@ -159,12 +159,6 @@ public class EliminacionRutina extends javax.swing.JFrame {
             conn = DatabaseManager.getInstance().getConnection();
             conn.setAutoCommit(false); // iniciar transacción
 
-            // 1. Eliminar ejecuciones de la rutina
-            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM Rutina_Ejecuciones WHERE id_rutina = ?")) {
-                ps.setInt(1, rutina.getIdRutina());
-                ps.executeUpdate();
-            }
-
             // 2. Eliminar ejercicios de la rutina
             try (PreparedStatement ps = conn.prepareStatement("DELETE FROM Rutina_Ejercicios WHERE id_rutina = ?")) {
                 ps.setInt(1, rutina.getIdRutina());
