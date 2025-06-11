@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toc version="1.0">
+
+    <tocitem text="Inicio" target="inicio"/>
+    <tocitem text="Uso de la aplicación" target="uso"/>
+    <tocitem text="Pantalla Principal" target="principal"/>
+
+    <tocitem text="Gestión de Usuarios" target="select_usuario" expand="false">
+        <tocitem text="Insertar Usuario" target="insert_usuario"/>
+        <tocitem text="Modificar Usuario" target="modificar_usuario"/>
+        <tocitem text="Eliminar Usuario" target="delete_usuario"/>
+        <tocitem text="Consultar Usuario" target="select_usuario"/>
+    </tocitem>
+
+    <tocitem text="Gestión de Rutinas" target="select_rutina" expand="false">
+        <tocitem text="Insertar Rutina" target="insert_rutina"/>
+        <tocitem text="Modificar Rutina" target="modificar_rutina"/>
+        <tocitem text="Eliminar Rutina" target="delete_rutina"/>
+        <tocitem text="Consultar Rutina" target="select_rutina"/>
+    </tocitem>
+
+    <tocitem text="Gestión de Ejercicios" target="select_ejercicio" expand="false">
+        <tocitem text="Insertar Ejercicio" target="insert_ejercicio"/>
+        <tocitem text="Modificar Ejercicio" target="modificar_ejercicio"/>
+        <tocitem text="Eliminar Ejercicio" target="delete_ejercicio"/>
+        <tocitem text="Consultar Ejercicio" target="select_ejercicio"/>
+    </tocitem>
+
+    <tocitem text="Gestión de Ejecuciones" target="select_ejecucion" expand="false">
+        <tocitem text="Insertar Ejecución" target="insert_ejecucion"/>
+        <tocitem text="Modificar Ejecución" target="modificar_ejecucion"/>
+        <tocitem text="Eliminar Ejecución" target="delete_ejecucion"/>
+        <tocitem text="Consultar Ejecución" target="select_ejecucion"/>
+    </tocitem>
+
+</toc>

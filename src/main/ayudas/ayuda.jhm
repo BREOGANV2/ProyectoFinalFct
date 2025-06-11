@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0">
+    <mapID target="inicio" url="inicio.html"/>
+    <mapID target="uso" url="uso.html"/>
+    <mapID target="principal" url="principal.html"/>
+    
+    <!-- Inserciones -->
+    <mapID target="insert_usuario" url="PantallaInsertUsuario.html"/>
+    <mapID target="insert_rutina" url="PantallaInsertRutina.html"/>
+    <mapID target="insert_ejercicio" url="PantallaInsertEjercicio.html"/>
+    <mapID target="insert_ejecucion" url="PantallaInsertEjecucion.html"/>
+    
+    <!-- Modificaciones -->
+    <mapID target="modificar_usuario" url="PantallaModificarUsuario.html"/>
+    <mapID target="modificar_rutina" url="PantallaModificarRutina.html"/>
+    <mapID target="modificar_ejercicio" url="PantallaModificarEjercicio.html"/>
+    <mapID target="modificar_ejecucion" url="PantallaModificarEjecuciones.html"/>
+    
+    <!-- Eliminaciones -->
+    <mapID target="delete_usuario" url="PantallaDeleteUsuarios.html"/>
+    <mapID target="delete_rutina" url="PantallaDeleteRutina.html"/>
+    <mapID target="delete_ejercicio" url="PantallaDeleteEjercicio.html"/>
+    <mapID target="delete_ejecucion" url="PantallaDeleteEjecucion.html"/>
+    
+    <!-- Consultas -->
+    <mapID target="select_usuario" url="PantallaSelectUsuario.html"/>
+    <mapID target="select_rutina" url="PantallaSelectRutina.html"/>
+    <mapID target="select_ejercicio" url="PantallaSelectEjercicio.html"/>
+    <mapID target="select_ejecucion" url="PantallaSelectEjecuciones.html"/>
+</map>

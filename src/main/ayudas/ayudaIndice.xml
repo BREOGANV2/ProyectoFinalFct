@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE index PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Index Version 1.0//EN" "http://java.sun.com/products/javahelp/index_1_0.dtd">
+<index version="1.0">
+
+   <!-- General -->
+   <indexitem text="Inicio" target="inicio"/>
+   <indexitem text="Uso de la aplicación" target="uso"/>
+   <indexitem text="Pantalla principal" target="principal"/>
+
+   <!-- Usuarios -->
+   <indexitem text="Insertar usuario" target="insert_usuario"/>
+   <indexitem text="Modificar usuario" target="modificar_usuario"/>
+   <indexitem text="Eliminar usuario" target="delete_usuario"/>
+   <indexitem text="Consultar usuario" target="select_usuario"/>
+
+   <!-- Rutinas -->
+   <indexitem text="Insertar rutina" target="insert_rutina"/>
+   <indexitem text="Modificar rutina" target="modificar_rutina"/>
+   <indexitem text="Eliminar rutina" target="delete_rutina"/>
+   <indexitem text="Consultar rutina" target="select_rutina"/>
+
+   <!-- Ejercicios -->
+   <indexitem text="Insertar ejercicio" target="insert_ejercicio"/>
+   <indexitem text="Modificar ejercicio" target="modificar_ejercicio"/>
+   <indexitem text="Eliminar ejercicio" target="delete_ejercicio"/>
+   <indexitem text="Consultar ejercicio" target="select_ejercicio"/>
+
+   <!-- Ejecuciones -->
+   <indexitem text="Insertar ejecución" target="insert_ejecucion"/>
+   <indexitem text="Modificar ejecución" target="modificar_ejecucion"/>
+   <indexitem text="Eliminar ejecución" target="delete_ejecucion"/>
+   <indexitem text="Consultar ejecución" target="select_ejecucion"/>
+
+</index>

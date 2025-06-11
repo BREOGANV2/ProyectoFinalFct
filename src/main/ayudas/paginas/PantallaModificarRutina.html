@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Modificar Rutina</title>
+</head>
+<body>
+    <h1>Modificar Rutina</h1>
+
+    <p>
+        Esta pantalla permite editar una rutina existente, incluyendo sus datos generales y los ejercicios que la componen.
+    </p>
+
+    <h2>1. Selección de rutina</h2>
+    <p>
+        En la parte superior se muestra una tabla con todas las rutinas disponibles. Para comenzar, haz clic en una fila de la tabla. Al hacerlo, los datos de esa rutina se cargarán automáticamente en los campos del formulario: <strong>nombre</strong>, <strong>descripción</strong>, <strong>objetivo</strong>, y <strong>usuario asignado</strong>.
+    </p>
+
+    <h2>2. Modificación de datos generales</h2>
+    <p>
+        Puedes modificar directamente los siguientes campos:
+    </p>
+    <ul>
+        <li><strong>Nombre:</strong> Nuevo nombre de la rutina.</li>
+        <li><strong>Descripción:</strong> Detalles generales de la rutina.</li>
+        <li><strong>Objetivo:</strong> Meta o propósito de la rutina (por ejemplo: tonificación, fuerza).</li>
+        <li><strong>Usuario:</strong> Selección desde el ComboBox de usuarios registrados.</li>
+    </ul>
+
+    <h2>3. Gestión de ejercicios de la rutina</h2>
+    <p>
+        En la sección de ejercicios puedes:
+    </p>
+    <ul>
+        <li>Seleccionar un ejercicio desde el ComboBox.</li>
+        <li>Especificar <strong>orden</strong>, <strong>series</strong> y <strong>repeticiones</strong>.</li>
+        <li>Pulsar <strong>"Añadir"</strong> para incluir el ejercicio en la lista de la rutina.</li>
+        <li>Seleccionar un ejercicio de la lista para ver sus parámetros o pulsar <strong>"Eliminar"</strong> para quitarlo.</li>
+    </ul>
+
+    <p>
+        Los ejercicios seleccionados se acumulan en una lista temporal hasta que se guarden los cambios.
+    </p>
+
+    <h2>4. Guardar la rutina modificada</h2>
+    <p>
+        Una vez realizados los cambios, haz clic en el botón <strong>"Guardar"</strong>:
+    </p>
+    <ul>
+        <li>Se actualizarán los datos generales de la rutina.</li>
+        <li>Se eliminarán los ejercicios anteriores asociados a ella.</li>
+        <li>Se insertarán los nuevos ejercicios definidos en la lista temporal.</li>
+    </ul>
+
+    <p>
+        Si hay errores (por ejemplo, campos vacíos o formatos incorrectos), se mostrará un mensaje de advertencia.
+    </p>
+
+    <img src="update_rutina.jpg" alt="Pantalla de modificación de rutina" style="max-width:100%; margin-top:20px;">
+</body>
+</html>
