@@ -31,22 +31,22 @@ public class AñadirRutina extends javax.swing.JFrame {
         lista.setModel(listModel);
         combo_ejercicio.setModel(comboBoxModel);
         comboUsuario.setModel(comboBoxModelUsuarios);
-        
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         try {
-    // Cargar usuarios en el combo
-    for (Usuario u : UsuarioDAO.getInstance().selectAll()) {
-        comboBoxModelUsuarios.addElement(u);
-    }
+            // Cargar usuarios en el combo
+            for (Usuario u : UsuarioDAO.getInstance().selectAll()) {
+                comboBoxModelUsuarios.addElement(u);
+            }
 
-    // Cargar ejercicios en el combo
-    for (Ejercicio i : EjercicioDAO.getInstance().selectAll()) {
-        comboBoxModel.addElement(i);
-    }
-} catch (SQLException i) {
-    i.printStackTrace();
-    JOptionPane.showMessageDialog(this, "Error cargando datos iniciales.", "Error", JOptionPane.ERROR_MESSAGE);
-}
+            // Cargar ejercicios en el combo
+            for (Ejercicio i : EjercicioDAO.getInstance().selectAll()) {
+                comboBoxModel.addElement(i);
+            }
+        } catch (SQLException i) {
+            i.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error cargando datos iniciales.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -78,12 +78,12 @@ public class AñadirRutina extends javax.swing.JFrame {
         t = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        txtOrden = new javax.swing.JTextField();
-        txtseries = new javax.swing.JTextField();
         txtrepeticiones = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         lista = new javax.swing.JList<>();
         combo_ejercicio = new javax.swing.JComboBox<>();
+        sliderSeries = new javax.swing.JSlider();
+        spinnerOrden = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Añadir Rutinas");
@@ -242,18 +242,6 @@ public class AñadirRutina extends javax.swing.JFrame {
         jPanel3.add(jLabel7, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 8;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanel3.add(txtOrden, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 8;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanel3.add(txtseries, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -285,6 +273,30 @@ public class AñadirRutina extends javax.swing.JFrame {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.25;
         jPanel3.add(combo_ejercicio, gridBagConstraints);
+
+        sliderSeries.setMajorTickSpacing(1);
+        sliderSeries.setMaximum(12);
+        sliderSeries.setMinimum(1);
+        sliderSeries.setMinorTickSpacing(1);
+        sliderSeries.setPaintLabels(true);
+        sliderSeries.setPaintTicks(true);
+        sliderSeries.setSnapToTicks(true);
+        sliderSeries.setToolTipText("");
+        sliderSeries.setValue(1);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.25;
+        jPanel3.add(sliderSeries, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.25;
+        jPanel3.add(spinnerOrden, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
@@ -329,74 +341,75 @@ public class AñadirRutina extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void btn_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addActionPerformed
-         Ejercicio ejercicioSeleccionado = (Ejercicio) combo_ejercicio.getSelectedItem();
+        Ejercicio ejercicioSeleccionado = (Ejercicio) combo_ejercicio.getSelectedItem();
 
-    if (ejercicioSeleccionado != null) {
-        if (!listModel.contains(ejercicioSeleccionado)) {
-            try {
-                int orden = Integer.parseInt(txtOrden.getText().trim());
-                int series = Integer.parseInt(txtseries.getText().trim());
-                String repeticiones = txtrepeticiones.getText().trim();
+        if (ejercicioSeleccionado != null) {
+            if (!listModel.contains(ejercicioSeleccionado)) {
+                try {
+                    int orden = (Integer) spinnerOrden.getValue();
+                    int series = sliderSeries.getValue();
 
-                // Crear y almacenar RutinaEjercicio temporal
-                RutinaEjercicio re = new RutinaEjercicio(0, ejercicioSeleccionado.getIdEjercicio(), orden, series, repeticiones);
-                rutinaEjerciciosTemporales.add(re);
+                    String repeticiones = txtrepeticiones.getText().trim();
 
-                listModel.addElement(ejercicioSeleccionado);
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Orden, series y repeticiones deben ser números.", "Error", JOptionPane.ERROR_MESSAGE);
+                    // Crear y almacenar RutinaEjercicio temporal
+                    RutinaEjercicio re = new RutinaEjercicio(0, ejercicioSeleccionado.getIdEjercicio(), orden, series, repeticiones);
+                    rutinaEjerciciosTemporales.add(re);
+
+                    listModel.addElement(ejercicioSeleccionado);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "Orden, series y repeticiones deben ser números.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Este ejercicio ya está en la lista.", "Elemento duplicado", JOptionPane.WARNING_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Este ejercicio ya está en la lista.", "Elemento duplicado", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Selecciona un ejercicio primero.", "Sin selección", JOptionPane.WARNING_MESSAGE);
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "Selecciona un ejercicio primero.", "Sin selección", JOptionPane.WARNING_MESSAGE);
-    }
     }//GEN-LAST:event_btn_addActionPerformed
 
     private void AñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AñadirActionPerformed
-       String nombre = jTextField1.getText().trim();
-    String descripcion = jTextArea1.getText().trim();
-    String objetivo = jTextArea2.getText().trim();
-    Usuario usuarioSeleccionado = (Usuario) comboUsuario.getSelectedItem();
+        String nombre = jTextField1.getText().trim();
+        String descripcion = jTextArea1.getText().trim();
+        String objetivo = jTextArea2.getText().trim();
+        Usuario usuarioSeleccionado = (Usuario) comboUsuario.getSelectedItem();
 
-    // Validaciones
-    if (nombre.isEmpty() || descripcion.isEmpty() || objetivo.isEmpty() || usuarioSeleccionado == null) {
-        JOptionPane.showMessageDialog(this, "Por favor, completa todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    if (rutinaEjerciciosTemporales.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Debes añadir al menos un ejercicio con sus datos.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    try {
-        // Crear rutina e insertar devolviendo el ID generado
-        Rutina rutina = new Rutina(0, usuarioSeleccionado.getIdUsuario(), nombre, descripcion, objetivo, LocalDate.now());
-        int idRutina = RutinaDAO.getInstance().insertAndReturnId(rutina);
-        Rutina rutinaInsertada = new Rutina(idRutina, rutina.getIdUsuario(), rutina.getNombre(), rutina.getDescripcion(), rutina.getObjetivo(), rutina.getFechaCreacion());
-
-        // Insertar todos los RutinaEjercicio temporales con el ID correcto
-        for (RutinaEjercicio reTemp : rutinaEjerciciosTemporales) {
-            RutinaEjercicio reFinal = new RutinaEjercicio(
-                rutinaInsertada.getIdRutina(),
-                reTemp.getIdEjercicio(),
-                reTemp.getOrden(),
-                reTemp.getSeries(),
-                reTemp.getRepeticiones()
-            );
-            RutinaEjercicioDAO.getInstance().insert(reFinal);
+        // Validaciones
+        if (nombre.isEmpty() || descripcion.isEmpty() || objetivo.isEmpty() || usuarioSeleccionado == null) {
+            JOptionPane.showMessageDialog(this, "Por favor, completa todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
-        JOptionPane.showMessageDialog(this, "Rutina guardada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        dispose();
+        if (rutinaEjerciciosTemporales.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debes añadir al menos un ejercicio con sus datos.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    } catch (NumberFormatException ex) {
-        JOptionPane.showMessageDialog(this, "Series y repeticiones deben ser números enteros.", "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    }
+        try {
+            // Crear rutina e insertar devolviendo el ID generado
+            Rutina rutina = new Rutina(0, usuarioSeleccionado.getIdUsuario(), nombre, descripcion, objetivo, LocalDate.now());
+            int idRutina = RutinaDAO.getInstance().insertAndReturnId(rutina);
+            Rutina rutinaInsertada = new Rutina(idRutina, rutina.getIdUsuario(), rutina.getNombre(), rutina.getDescripcion(), rutina.getObjetivo(), rutina.getFechaCreacion());
+
+            // Insertar todos los RutinaEjercicio temporales con el ID correcto
+            for (RutinaEjercicio reTemp : rutinaEjerciciosTemporales) {
+                RutinaEjercicio reFinal = new RutinaEjercicio(
+                        rutinaInsertada.getIdRutina(),
+                        reTemp.getIdEjercicio(),
+                        reTemp.getOrden(),
+                        reTemp.getSeries(),
+                        reTemp.getRepeticiones()
+                );
+                RutinaEjercicioDAO.getInstance().insert(reFinal);
+            }
+
+            JOptionPane.showMessageDialog(this, "Rutina guardada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            dispose();
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Series y repeticiones deben ser números enteros.", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_AñadirActionPerformed
 
     /**
@@ -446,10 +459,10 @@ public class AñadirRutina extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JList<Ejercicio> lista;
+    private javax.swing.JSlider sliderSeries;
+    private javax.swing.JSpinner spinnerOrden;
     private javax.swing.JLabel t;
-    private javax.swing.JTextField txtOrden;
     private javax.swing.JTextField txtrepeticiones;
-    private javax.swing.JTextField txtseries;
     // End of variables declaration//GEN-END:variables
     private DefaultListModel<Ejercicio> listModel;
     private DefaultComboBoxModel<Ejercicio> comboBoxModel;

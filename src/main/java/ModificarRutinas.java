@@ -124,8 +124,6 @@ private void cargarEjerciciosDeRutina(Rutina rutina) {
         guardar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jTextField4 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -134,6 +132,8 @@ private void cargarEjerciciosDeRutina(Rutina rutina) {
         remove_ejercicio = new javax.swing.JButton();
         add_ejercicio = new javax.swing.JButton();
         comboEjercicios = new javax.swing.JComboBox<>();
+        spinnerOrden = new javax.swing.JSpinner();
+        sliderSeries1 = new javax.swing.JSlider();
         btnEliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -264,18 +264,6 @@ private void cargarEjerciciosDeRutina(Rutina rutina) {
         gridBagConstraints.gridwidth = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanel2.add(jTextField4, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
-        gridBagConstraints.gridwidth = 13;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanel2.add(jTextField3, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 13;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanel2.add(jTextField2, gridBagConstraints);
 
         jLabel7.setText("Repeticiones");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -307,9 +295,9 @@ private void cargarEjerciciosDeRutina(Rutina rutina) {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 21;
-        gridBagConstraints.gridheight = 7;
+        gridBagConstraints.gridheight = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
@@ -349,6 +337,32 @@ private void cargarEjerciciosDeRutina(Rutina rutina) {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         jPanel2.add(comboEjercicios, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = 13;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.25;
+        jPanel2.add(spinnerOrden, gridBagConstraints);
+
+        sliderSeries1.setMajorTickSpacing(1);
+        sliderSeries1.setMaximum(12);
+        sliderSeries1.setMinimum(1);
+        sliderSeries1.setMinorTickSpacing(1);
+        sliderSeries1.setPaintLabels(true);
+        sliderSeries1.setPaintTicks(true);
+        sliderSeries1.setSnapToTicks(true);
+        sliderSeries1.setToolTipText("");
+        sliderSeries1.setValue(1);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridwidth = 13;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.25;
+        jPanel2.add(sliderSeries1, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
@@ -407,9 +421,9 @@ private void cargarEjerciciosDeRutina(Rutina rutina) {
 
     if (ejercicio != null && !modelLista.contains(ejercicio)) {
         try {
-            int orden = Integer.parseInt(jTextField2.getText().trim());
-            int series = Integer.parseInt(jTextField3.getText().trim());
-            String repeticiones = jTextField4.getText().trim();
+            int orden = (Integer) spinnerOrden.getValue();       // ✔ nuevo componente
+            int series = sliderSeries1.getValue();               // ✔ nuevo componente
+            String repeticiones = jTextField4.getText().trim();  // repeticiones sigue como texto
 
             RutinaEjercicio re = new RutinaEjercicio(
                 0, // id_rutina se agregará al guardar
@@ -482,14 +496,13 @@ private void cargarEjerciciosDeRutina(Rutina rutina) {
     }//GEN-LAST:event_guardarActionPerformed
 
     private void listaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listaMouseClicked
-        // TODO add your handling code here:
-         Ejercicio seleccionado = lista.getSelectedValue();
+        Ejercicio seleccionado = lista.getSelectedValue();
     if (seleccionado != null) {
         for (RutinaEjercicio re : ejerciciosTemporales) {
             if (re.getIdEjercicio() == seleccionado.getIdEjercicio()) {
-                jTextField2.setText(String.valueOf(re.getOrden()));
-                jTextField3.setText(String.valueOf(re.getSeries()));
-                jTextField4.setText(String.valueOf(re.getRepeticiones()));
+                spinnerOrden.setValue(re.getOrden());               // ← nuevo componente
+                sliderSeries1.setValue(re.getSeries());             // ← nuevo componente
+                jTextField4.setText(String.valueOf(re.getRepeticiones())); // repeticiones sigue con textfield
                 break;
             }
         }
@@ -612,11 +625,11 @@ private void cargarEjerciciosDeRutina(Rutina rutina) {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JList<Ejercicio> lista;
     private javax.swing.JButton remove_ejercicio;
+    private javax.swing.JSlider sliderSeries1;
+    private javax.swing.JSpinner spinnerOrden;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
     private DefaultComboBoxModel<Usuario> modelComboUsuario;

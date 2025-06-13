@@ -24,6 +24,15 @@ public class AñadirEjercicio extends javax.swing.JFrame {
      */
     public AñadirEjercicio() {
         initComponents();
+        comboGrupoMuscular.addItem("Pecho");
+        comboGrupoMuscular.addItem("Espalda");
+        comboGrupoMuscular.addItem("Piernas");
+        comboGrupoMuscular.addItem("Hombros");
+        comboGrupoMuscular.addItem("Bíceps");
+        comboGrupoMuscular.addItem("Tríceps");
+        comboGrupoMuscular.addItem("Abdomen");
+        comboGrupoMuscular.addItem("Glúteos");
+        comboGrupoMuscular.setSelectedIndex(1);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
@@ -41,7 +50,6 @@ public class AñadirEjercicio extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -50,6 +58,7 @@ public class AñadirEjercicio extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         btn_fileSelector = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
+        comboGrupoMuscular = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Añadir Ejercicios");
@@ -86,13 +95,6 @@ public class AñadirEjercicio extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         getContentPane().add(jLabel3, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 0.25;
-        getContentPane().add(jTextField4, gridBagConstraints);
 
         jButton1.setText("Añadir");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -168,8 +170,16 @@ public class AñadirEjercicio extends javax.swing.JFrame {
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.weighty = 0.25;
         getContentPane().add(jPanel1, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.25;
+        getContentPane().add(comboGrupoMuscular, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -195,18 +205,14 @@ public class AñadirEjercicio extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
           String nombre = jTextField1.getText().trim();
-    String grupoMuscular = jTextField4.getText().trim(); // Campo del grupo muscular
+    String grupoMuscular = (String) comboGrupoMuscular.getSelectedItem();
     String descripcion = jTextArea1.getText().trim();
     String urlImagen = rutaArchivoSeleccionado;
-    String nombreImagen = nombreTxT.getText().trim(); // Campo del nombre de la imagen
+    String nombreImagen = nombreTxT.getText().trim(); 
 
     // Validaciones
     if (nombre.isEmpty()) {
         JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-    if (grupoMuscular.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "El grupo muscular no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
         return;
     }
     if (descripcion.isEmpty()) {
@@ -221,6 +227,11 @@ public class AñadirEjercicio extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "El nombre de la imagen no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
         return;
     }
+    if (grupoMuscular == null || grupoMuscular.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Debes seleccionar un grupo muscular.", "Error", JOptionPane.ERROR_MESSAGE);
+    return;
+}
+
 
     // Crear objeto Ejercicio con todos los datos
     Ejercicio ejercicio = new Ejercicio(nombre, grupoMuscular, descripcion, urlImagen, nombreImagen);
@@ -262,6 +273,7 @@ public class AñadirEjercicio extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_fileSelector;
+    private javax.swing.JComboBox<String> comboGrupoMuscular;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -272,7 +284,6 @@ public class AñadirEjercicio extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField nombreTxT;
     // End of variables declaration//GEN-END:variables
     private String rutaArchivoSeleccionado;

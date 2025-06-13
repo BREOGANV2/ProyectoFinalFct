@@ -22,6 +22,15 @@ public class ModificarEjercicio extends javax.swing.JFrame {
     public ModificarEjercicio() {
 
         initComponents();
+        comboGrupoMuscular.addItem("Pecho");
+comboGrupoMuscular.addItem("Espalda");
+comboGrupoMuscular.addItem("Piernas");
+comboGrupoMuscular.addItem("Hombros");
+comboGrupoMuscular.addItem("Bíceps");
+comboGrupoMuscular.addItem("Tríceps");
+comboGrupoMuscular.addItem("Abdomen");
+comboGrupoMuscular.addItem("Glúteos");
+comboGrupoMuscular.setSelectedIndex(1);
         modeloTabla = table.getModel();
         try {
             cargarTabla();
@@ -37,7 +46,7 @@ public class ModificarEjercicio extends javax.swing.JFrame {
         java.util.List<Ejercicio> ejercicios = dao.selectAll();
 
         // Columnas completas
-        String[] columnas = {"ID", "Nombre", "Descripción", "Grupo Muscular", "URL Imagen"};
+        String[] columnas = {"ID", "Nombre", "Descripción", "Grupo Muscular", "URL Imagen","Nombre de la imagen"};
         Object[][] datos = new Object[ejercicios.size()][5];
 
         for (int i = 0; i < ejercicios.size(); i++) {
@@ -83,8 +92,8 @@ public class ModificarEjercicio extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         nombreImagenTxT = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        txtGrupoMuscular = new javax.swing.JTextField();
         btnEliminar = new javax.swing.JButton();
+        comboGrupoMuscular = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Modificar un Ejercicio");
@@ -205,11 +214,6 @@ public class ModificarEjercicio extends javax.swing.JFrame {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(jLabel5, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanel1.add(txtGrupoMuscular, gridBagConstraints);
 
         btnEliminar.setText("Eliminar");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -218,6 +222,14 @@ public class ModificarEjercicio extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnEliminar, new java.awt.GridBagConstraints());
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.25;
+        jPanel1.add(comboGrupoMuscular, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -247,6 +259,9 @@ public class ModificarEjercicio extends javax.swing.JFrame {
         if (fila >= 0) {
             jTextField1.setText(table.getValueAt(fila, 1).toString());  // Nombre
             jTextArea1.setText(table.getValueAt(fila, 2).toString());   // Descripción
+            comboGrupoMuscular.setSelectedItem(table.getValueAt(fila, 3).toString());
+            nombreImagenTxT.setText(table.getValueAt(fila, 5).toString());
+
         }
     }//GEN-LAST:event_tableMouseClicked
 
@@ -258,13 +273,18 @@ public class ModificarEjercicio extends javax.swing.JFrame {
             String nuevoNombre = jTextField1.getText().trim();
             String nuevaDescripcion = jTextArea1.getText().trim();
             String nuevaUrlImagen = rutaArchivoSeleccionado;
-            String nuevoGrupoMuscular = txtGrupoMuscular.getText().trim();
+            String nuevoGrupoMuscular = (String) comboGrupoMuscular.getSelectedItem();
             String nuevoNombreImagen = nombreImagenTxT.getText().trim();
 
-            if (nuevoNombre.isEmpty() || nuevaDescripcion.isEmpty() || nuevoGrupoMuscular.isEmpty() || nuevoNombreImagen.isEmpty()) {
+            if (nuevoNombre.isEmpty() || nuevaDescripcion.isEmpty() || nuevoNombreImagen.isEmpty()) {
                 javax.swing.JOptionPane.showMessageDialog(this, "Por favor, completa todos los campos.");
                 return;
             }
+            if (nuevoGrupoMuscular == null || nuevoGrupoMuscular.isEmpty()) {
+    javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un grupo muscular válido.");
+    return;
+}
+
 
             EjercicioDAO dao = EjercicioDAO.getInstance();
             Ejercicio anterior = dao.selectById(id);
@@ -401,6 +421,7 @@ public class ModificarEjercicio extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEliminar;
+    private javax.swing.JComboBox<String> comboGrupoMuscular;
     private javax.swing.JButton file_button;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -415,7 +436,6 @@ public class ModificarEjercicio extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField nombreImagenTxT;
     private javax.swing.JTable table;
-    private javax.swing.JTextField txtGrupoMuscular;
     // End of variables declaration//GEN-END:variables
     private String rutaArchivoSeleccionado;
     private TableModel modeloTabla;
