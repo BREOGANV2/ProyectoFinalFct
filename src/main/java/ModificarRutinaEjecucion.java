@@ -68,6 +68,7 @@ public class ModificarRutinaEjecucion extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
         updateButton = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -158,6 +159,14 @@ public class ModificarRutinaEjecucion extends javax.swing.JFrame {
         gridBagConstraints.gridy = 7;
         jPanel1.add(updateButton, gridBagConstraints);
 
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEliminar, new java.awt.GridBagConstraints());
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -222,6 +231,41 @@ public class ModificarRutinaEjecucion extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_updateButtonActionPerformed
 
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+         int fila = tablaEjecuciones.getSelectedRow();
+    if (fila == -1) {
+        JOptionPane.showMessageDialog(this, "Selecciona una ejecución para eliminar", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    RutinaEjecucion ejecucion = ejecuciones.get(fila);
+
+    int confirmacion = JOptionPane.showConfirmDialog(
+        this,
+        "¿Seguro que deseas eliminar esta ejecución?",
+        "Confirmación",
+        JOptionPane.YES_NO_OPTION
+    );
+
+    if (confirmacion != JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    try {
+        RutinaEjecucionDAO.getInstance().delete(ejecucion.getIdEjecucion());
+        JOptionPane.showMessageDialog(this, "Ejecución eliminada correctamente.");
+        cargarTabla(); // recarga los datos de la tabla
+        selectedIndex = -1;
+        jTextField1.setText("");
+        jTextField2.setText("");
+        jTextArea1.setText("");
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al eliminar la ejecución", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -248,6 +292,7 @@ public class ModificarRutinaEjecucion extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

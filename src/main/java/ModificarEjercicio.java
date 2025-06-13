@@ -84,6 +84,7 @@ public class ModificarEjercicio extends javax.swing.JFrame {
         nombreImagenTxT = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txtGrupoMuscular = new javax.swing.JTextField();
+        btnEliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(500, 500));
@@ -209,6 +210,14 @@ public class ModificarEjercicio extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         jPanel1.add(txtGrupoMuscular, gridBagConstraints);
 
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEliminar, new java.awt.GridBagConstraints());
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -285,6 +294,85 @@ public class ModificarEjercicio extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+         int fila = table.getSelectedRow();
+    if (fila == -1) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un ejercicio para eliminar", "Advertencia", javax.swing.JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    int idEjercicio = Integer.parseInt(table.getValueAt(fila, 0).toString());
+
+    Ejercicio ejercicio;
+    try {
+        ejercicio = EjercicioDAO.getInstance().selectById(idEjercicio);
+        if (ejercicio == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Ejercicio no encontrado.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        javax.swing.JOptionPane.showMessageDialog(this, "Error al obtener datos del ejercicio", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    int confirmacion = javax.swing.JOptionPane.showConfirmDialog(
+        this,
+        "¿Seguro que deseas eliminar el ejercicio '" + ejercicio.getNombre() + "'?",
+        "Confirmación",
+        javax.swing.JOptionPane.YES_NO_OPTION
+    );
+
+    if (confirmacion != javax.swing.JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    java.sql.Connection conn = null;
+
+    try {
+        conn = DatabaseManager.getInstance().getConnection();
+        conn.setAutoCommit(false);  // Iniciar transacción
+
+        // 1. Eliminar de Rutina_Ejercicios
+        try (java.sql.PreparedStatement stmt1 = conn.prepareStatement(
+                "DELETE FROM Rutina_Ejercicios WHERE id_ejercicio = ?")) {
+            stmt1.setInt(1, ejercicio.getIdEjercicio());
+            stmt1.executeUpdate();
+        }
+
+        // 2. Eliminar de Ejercicios
+        try (java.sql.PreparedStatement stmt2 = conn.prepareStatement(
+                "DELETE FROM Ejercicios WHERE id_ejercicio = ?")) {
+            stmt2.setInt(1, ejercicio.getIdEjercicio());
+            stmt2.executeUpdate();
+        }
+
+        conn.commit();
+        javax.swing.JOptionPane.showMessageDialog(this, "Ejercicio eliminado correctamente.");
+        cargarTabla();  // refrescar la tabla
+
+    } catch (java.sql.SQLException ex) {
+        ex.printStackTrace();
+        if (conn != null) {
+            try {
+                conn.rollback();
+            } catch (java.sql.SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+        }
+        javax.swing.JOptionPane.showMessageDialog(this, "Error al eliminar ejercicio", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+    } finally {
+        if (conn != null) {
+            try {
+                conn.setAutoCommit(true);
+            } catch (java.sql.SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -311,6 +399,7 @@ public class ModificarEjercicio extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton file_button;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;

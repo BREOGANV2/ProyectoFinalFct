@@ -134,6 +134,7 @@ private void cargarEjerciciosDeRutina(Rutina rutina) {
         remove_ejercicio = new javax.swing.JButton();
         add_ejercicio = new javax.swing.JButton();
         comboEjercicios = new javax.swing.JComboBox<>();
+        btnEliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(800, 800));
@@ -358,6 +359,14 @@ private void cargarEjerciciosDeRutina(Rutina rutina) {
         gridBagConstraints.weighty = 1.0;
         jPanel1.add(jPanel2, gridBagConstraints);
 
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEliminar, new java.awt.GridBagConstraints());
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -486,6 +495,75 @@ private void cargarEjerciciosDeRutina(Rutina rutina) {
     }
     }//GEN-LAST:event_listaMouseClicked
 
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+        int fila = table.getSelectedRow();
+    if (fila == -1) {
+        JOptionPane.showMessageDialog(this, "Selecciona una rutina para eliminar", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    Rutina rutina = rutinasCargadas.get(fila);
+
+    int confirmacion = JOptionPane.showConfirmDialog(
+        this,
+        "¿Seguro que deseas eliminar la rutina '" + rutina.getNombre() + "' y todo lo asociado?",
+        "Confirmación",
+        JOptionPane.YES_NO_OPTION
+    );
+
+    if (confirmacion != JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    java.sql.Connection conn = null;
+    try {
+        conn = DatabaseManager.getInstance().getConnection();
+        conn.setAutoCommit(false); // iniciar transacción
+
+        // 1. Eliminar ejecuciones de la rutina
+        try (java.sql.PreparedStatement ps = conn.prepareStatement("DELETE FROM Rutina_Ejecuciones WHERE id_rutina = ?")) {
+            ps.setInt(1, rutina.getIdRutina());
+            ps.executeUpdate();
+        }
+
+        // 2. Eliminar ejercicios de la rutina
+        try (java.sql.PreparedStatement ps = conn.prepareStatement("DELETE FROM Rutina_Ejercicios WHERE id_rutina = ?")) {
+            ps.setInt(1, rutina.getIdRutina());
+            ps.executeUpdate();
+        }
+
+        // 3. Eliminar la rutina
+        try (java.sql.PreparedStatement ps = conn.prepareStatement("DELETE FROM Rutinas WHERE id_rutina = ?")) {
+            ps.setInt(1, rutina.getIdRutina());
+            ps.executeUpdate();
+        }
+
+        conn.commit();
+        JOptionPane.showMessageDialog(this, "Rutina y datos relacionados eliminados correctamente.");
+        cargarRutinasEnTabla(); // refrescar tabla
+
+    } catch (java.sql.SQLException ex) {
+        ex.printStackTrace();
+        try {
+            if (conn != null) {
+                conn.rollback();
+            }
+        } catch (java.sql.SQLException rollbackEx) {
+            rollbackEx.printStackTrace();
+        }
+        JOptionPane.showMessageDialog(this, "Error al eliminar la rutina", "Error", JOptionPane.ERROR_MESSAGE);
+    } finally {
+        try {
+            if (conn != null) {
+                conn.setAutoCommit(true);
+            }
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -513,6 +591,7 @@ private void cargarEjerciciosDeRutina(Rutina rutina) {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add_ejercicio;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JComboBox<Ejercicio> comboEjercicios;
     private javax.swing.JComboBox<Usuario> comboUsuarios;
     private javax.swing.JButton guardar;

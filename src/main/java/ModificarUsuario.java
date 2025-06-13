@@ -70,7 +70,7 @@ public class ModificarUsuario extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jPanel1 = new javax.swing.JPanel();
+        fondo = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
@@ -80,13 +80,14 @@ public class ModificarUsuario extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         add_button = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
+        btnEliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(500, 500));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Modificar Usuario"));
-        jPanel1.setLayout(new java.awt.GridBagLayout());
+        fondo.setBorder(javax.swing.BorderFactory.createTitledBorder("Modificar Usuario"));
+        fondo.setLayout(new java.awt.GridBagLayout());
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -109,46 +110,49 @@ public class ModificarUsuario extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel1.add(jScrollPane1, gridBagConstraints);
+        fondo.add(jScrollPane1, gridBagConstraints);
 
         jLabel1.setText("Nombre");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        jPanel1.add(jLabel1, gridBagConstraints);
+        fondo.add(jLabel1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.25;
-        jPanel1.add(jTextField1, gridBagConstraints);
+        fondo.add(jTextField1, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.25;
-        jPanel1.add(jSpinner1, gridBagConstraints);
+        fondo.add(jSpinner1, gridBagConstraints);
 
         jLabel2.setText("Edad");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        jPanel1.add(jLabel2, gridBagConstraints);
+        fondo.add(jLabel2, gridBagConstraints);
 
         jLabel3.setText("Género");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        jPanel1.add(jLabel3, gridBagConstraints);
+        fondo.add(jLabel3, gridBagConstraints);
 
         add_button.setText("Modificar");
         add_button.addActionListener(new java.awt.event.ActionListener() {
@@ -157,9 +161,11 @@ public class ModificarUsuario extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
-        jPanel1.add(add_button, gridBagConstraints);
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 1;
+        gridBagConstraints.ipady = 1;
+        fondo.add(add_button, gridBagConstraints);
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Hombre", "Mujer", "Otro" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -168,13 +174,26 @@ public class ModificarUsuario extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.25;
-        jPanel1.add(jComboBox1, gridBagConstraints);
+        fondo.add(jComboBox1, gridBagConstraints);
+
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        fondo.add(btnEliminar, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        getContentPane().add(jPanel1, gridBagConstraints);
+        getContentPane().add(fondo, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -235,6 +254,102 @@ public class ModificarUsuario extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_tableMouseClicked
 
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+         int fila = table.getSelectedRow();
+    if (fila == -1) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Selecciona un usuario para eliminar", "Advertencia", javax.swing.JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    int idUsuario = (int) table.getModel().getValueAt(fila, 0);
+    Usuario usuario;
+    try {
+        usuario = UsuarioDAO.getInstance().selectById(idUsuario);
+        if (usuario == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Usuario no encontrado.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        javax.swing.JOptionPane.showMessageDialog(this, "Error al obtener datos del usuario", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    int confirmacion = javax.swing.JOptionPane.showConfirmDialog(
+        this,
+        "¿Seguro que deseas eliminar al usuario \"" + usuario.getNombre() + "\" y todo lo asociado?",
+        "Confirmación",
+        javax.swing.JOptionPane.YES_NO_OPTION
+    );
+
+    if (confirmacion != javax.swing.JOptionPane.YES_OPTION) return;
+
+    java.sql.Connection conn = null;
+
+    try {
+        conn = DatabaseManager.getInstance().getConnection();
+        conn.setAutoCommit(false); // empezar transacción
+
+        // 1. Obtener todas las rutinas del usuario
+        java.util.List<Integer> idRutinas = new java.util.ArrayList<>();
+        String sqlRutinas = "SELECT id_rutina FROM Rutinas WHERE id_usuario = ?";
+        try (java.sql.PreparedStatement ps = conn.prepareStatement(sqlRutinas)) {
+            ps.setInt(1, usuario.getIdUsuario());
+            try (java.sql.ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    idRutinas.add(rs.getInt("id_rutina"));
+                }
+            }
+        }
+
+        for (int idRutina : idRutinas) {
+            // 2. Eliminar ejecuciones
+            try (java.sql.PreparedStatement ps = conn.prepareStatement("DELETE FROM Rutina_Ejecuciones WHERE id_rutina = ?")) {
+                ps.setInt(1, idRutina);
+                ps.executeUpdate();
+            }
+
+            // 3. Eliminar ejercicios asignados
+            try (java.sql.PreparedStatement ps = conn.prepareStatement("DELETE FROM Rutina_Ejercicios WHERE id_rutina = ?")) {
+                ps.setInt(1, idRutina);
+                ps.executeUpdate();
+            }
+
+            // 4. Eliminar la rutina
+            try (java.sql.PreparedStatement ps = conn.prepareStatement("DELETE FROM Rutinas WHERE id_rutina = ?")) {
+                ps.setInt(1, idRutina);
+                ps.executeUpdate();
+            }
+        }
+
+        // 5. Finalmente, eliminar el usuario
+        try (java.sql.PreparedStatement ps = conn.prepareStatement("DELETE FROM Usuarios WHERE id_usuario = ?")) {
+            ps.setInt(1, usuario.getIdUsuario());
+            ps.executeUpdate();
+        }
+
+        conn.commit();
+        javax.swing.JOptionPane.showMessageDialog(this, "Usuario y datos relacionados eliminados correctamente.");
+        cargarUsuariosEnTabla(); // actualizar tabla
+
+    } catch (java.sql.SQLException ex) {
+        ex.printStackTrace();
+        try {
+            if (conn != null) conn.rollback();
+        } catch (java.sql.SQLException rollbackEx) {
+            rollbackEx.printStackTrace();
+        }
+        javax.swing.JOptionPane.showMessageDialog(this, "Error al eliminar usuario", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+    } finally {
+        try {
+            if (conn != null) conn.setAutoCommit(true);
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -262,11 +377,12 @@ public class ModificarUsuario extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add_button;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JPanel fondo;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTextField jTextField1;
