@@ -1,5 +1,3 @@
-
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,24 +18,26 @@ public class EjercicioDAO {
     }
 
     public void insert(Ejercicio ejercicio) throws SQLException {
-        String sql = "INSERT INTO Ejercicios (nombre, grupo_muscular, descripcion, url_imagen) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Ejercicios (nombre, grupo_muscular, descripcion, url_imagen, nombre_imagen) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, ejercicio.getNombre());
             stmt.setString(2, ejercicio.getGrupoMuscular());
             stmt.setString(3, ejercicio.getDescripcion());
             stmt.setString(4, ejercicio.getUrlImagen());
+            stmt.setString(5, ejercicio.getNombreImagen());
             stmt.executeUpdate();
         }
     }
 
     public void update(Ejercicio ejercicio) throws SQLException {
-        String sql = "UPDATE Ejercicios SET nombre=?, grupo_muscular=?, descripcion=?, url_imagen=? WHERE id_ejercicio=?";
+        String sql = "UPDATE Ejercicios SET nombre=?, grupo_muscular=?, descripcion=?, url_imagen=?, nombre_imagen=? WHERE id_ejercicio=?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, ejercicio.getNombre());
             stmt.setString(2, ejercicio.getGrupoMuscular());
             stmt.setString(3, ejercicio.getDescripcion());
             stmt.setString(4, ejercicio.getUrlImagen());
-            stmt.setInt(5, ejercicio.getIdEjercicio());
+            stmt.setString(5, ejercicio.getNombreImagen());
+            stmt.setInt(6, ejercicio.getIdEjercicio());
             stmt.executeUpdate();
         }
     }
@@ -50,7 +50,7 @@ public class EjercicioDAO {
         }
     }
 
-    // NUEVO: Eliminar primero en Rutina_Ejercicios, luego el ejercicio
+    // Elimina en cascada desde Rutina_Ejercicios
     public void deleteCascade(int idEjercicio) throws SQLException {
         Connection conn = DatabaseManager.getInstance().getConnection();
         try {
@@ -81,36 +81,38 @@ public class EjercicioDAO {
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                Ejercicio e = new Ejercicio();
-                e.setIdEjercicio(rs.getInt("id_ejercicio"));
-                e.setNombre(rs.getString("nombre"));
-                e.setGrupoMuscular(rs.getString("grupo_muscular"));
-                e.setDescripcion(rs.getString("descripcion"));
-                e.setUrlImagen(rs.getString("url_imagen"));
+                Ejercicio e = new Ejercicio(
+                    rs.getInt("id_ejercicio"),
+                    rs.getString("nombre"),
+                    rs.getString("grupo_muscular"),
+                    rs.getString("descripcion"),
+                    rs.getString("url_imagen"),
+                    rs.getString("nombre_imagen")
+                );
                 list.add(e);
             }
         }
         return list;
     }
-    
+
     public Ejercicio selectById(int id) throws SQLException {
-    String sql = "SELECT * FROM Ejercicios WHERE id_ejercicio = ?";
-    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-        stmt.setInt(1, id);
-        try (ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) {
-                return new Ejercicio(
-                    rs.getInt("id_ejercicio"),
-                    rs.getString("nombre"),
-                    rs.getString("grupo_muscular"),
-                    rs.getString("descripcion"),
-                    rs.getString("url_imagen")
-                );
-            } else {
-                return null;
+        String sql = "SELECT * FROM Ejercicios WHERE id_ejercicio = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Ejercicio(
+                        rs.getInt("id_ejercicio"),
+                        rs.getString("nombre"),
+                        rs.getString("grupo_muscular"),
+                        rs.getString("descripcion"),
+                        rs.getString("url_imagen"),
+                        rs.getString("nombre_imagen")
+                    );
+                } else {
+                    return null;
+                }
             }
         }
     }
-}
-
 }

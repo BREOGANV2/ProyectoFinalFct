@@ -22,6 +22,7 @@ public class ModificarRutinaEjecucion extends javax.swing.JFrame {
      */
     public ModificarRutinaEjecucion() {
         initComponents();
+        setMinimumSize(new java.awt.Dimension(600, 600));
         cargarTabla();
     }
 
@@ -72,6 +73,7 @@ public class ModificarRutinaEjecucion extends javax.swing.JFrame {
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Modificar Ejecución de una Rutina"));
+        jPanel1.setMinimumSize(new java.awt.Dimension(500, 500));
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         tablaEjecuciones.setModel(new javax.swing.table.DefaultTableModel(

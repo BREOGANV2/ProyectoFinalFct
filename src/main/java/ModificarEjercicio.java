@@ -80,6 +80,10 @@ public class ModificarEjercicio extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         file_button = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        nombreImagenTxT = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        txtGrupoMuscular = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(500, 500));
@@ -152,7 +156,7 @@ public class ModificarEjercicio extends javax.swing.JFrame {
         jLabel3.setText("url_imagen");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(jLabel3, gridBagConstraints);
 
@@ -164,7 +168,7 @@ public class ModificarEjercicio extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.25;
@@ -178,8 +182,32 @@ public class ModificarEjercicio extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         jPanel1.add(jButton2, gridBagConstraints);
+
+        jLabel4.setText("Nombre de la Imagen");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel1.add(jLabel4, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanel1.add(nombreImagenTxT, gridBagConstraints);
+
+        jLabel5.setText("grupo muscular");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel1.add(jLabel5, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanel1.add(txtGrupoMuscular, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -214,47 +242,47 @@ public class ModificarEjercicio extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         int fila = table.getSelectedRow();
-        if (fila >= 0) {
-            try {
-                int id = Integer.parseInt(table.getValueAt(fila, 0).toString());
-                String nuevoNombre = jTextField1.getText().trim();
-                String nuevaDescripcion = jTextArea1.getText().trim();
-                String nuevaUrlImagen = rutaArchivoSeleccionado; // Debes tener esta como variable de clase
+    if (fila >= 0) {
+        try {
+            int id = Integer.parseInt(table.getValueAt(fila, 0).toString());
+            String nuevoNombre = jTextField1.getText().trim();
+            String nuevaDescripcion = jTextArea1.getText().trim();
+            String nuevaUrlImagen = rutaArchivoSeleccionado;
+            String nuevoGrupoMuscular = txtGrupoMuscular.getText().trim();
+            String nuevoNombreImagen = nombreImagenTxT.getText().trim();
 
-                // Validación básica
-                if (nuevoNombre.isEmpty() || nuevaDescripcion.isEmpty()) {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Por favor, completa todos los campos.");
-                    return;
-                }
-
-                // Puedes agregar aquí una selección de grupo muscular si quieres
-                // De momento lo dejamos igual al anterior
-                EjercicioDAO dao = EjercicioDAO.getInstance();
-                Ejercicio anterior = dao.selectById(id);
-                if (anterior == null) {
-                    javax.swing.JOptionPane.showMessageDialog(this, "No se encontró el ejercicio en la base de datos.");
-                    return;
-                }
-
-                Ejercicio ejercicioActualizado = new Ejercicio(
-                        id,
-                        nuevoNombre,
-                        anterior.getGrupoMuscular(), // mantiene el grupo muscular anterior
-                        nuevaDescripcion,
-                        nuevaUrlImagen != null ? nuevaUrlImagen : anterior.getUrlImagen()
-                );
-
-                dao.update(ejercicioActualizado);
-                cargarTabla(); // refrescar tabla
-
-                javax.swing.JOptionPane.showMessageDialog(this, "Ejercicio actualizado correctamente.");
-            } catch (Exception ex) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Error al actualizar: " + ex.getMessage());
-                ex.printStackTrace();
+            if (nuevoNombre.isEmpty() || nuevaDescripcion.isEmpty() || nuevoGrupoMuscular.isEmpty() || nuevoNombreImagen.isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Por favor, completa todos los campos.");
+                return;
             }
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona una fila para modificar.");
+
+            EjercicioDAO dao = EjercicioDAO.getInstance();
+            Ejercicio anterior = dao.selectById(id);
+            if (anterior == null) {
+                javax.swing.JOptionPane.showMessageDialog(this, "No se encontró el ejercicio en la base de datos.");
+                return;
+            }
+
+            Ejercicio ejercicioActualizado = new Ejercicio(
+                id,
+                nuevoNombre,
+                nuevoGrupoMuscular,
+                nuevaDescripcion,
+                nuevaUrlImagen != null ? nuevaUrlImagen : anterior.getUrlImagen(),
+                nuevoNombreImagen
+            );
+
+            dao.update(ejercicioActualizado);
+            cargarTabla();
+
+            javax.swing.JOptionPane.showMessageDialog(this, "Ejercicio actualizado correctamente.");
+        } catch (Exception ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error al actualizar: " + ex.getMessage());
+            ex.printStackTrace();
         }
+    } else {
+        javax.swing.JOptionPane.showMessageDialog(this, "Selecciona una fila para modificar.");
+    }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -288,12 +316,16 @@ public class ModificarEjercicio extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField nombreImagenTxT;
     private javax.swing.JTable table;
+    private javax.swing.JTextField txtGrupoMuscular;
     // End of variables declaration//GEN-END:variables
     private String rutaArchivoSeleccionado;
     private TableModel modeloTabla;
