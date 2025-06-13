@@ -137,6 +137,7 @@ private void cargarEjerciciosDeRutina(Rutina rutina) {
         btnEliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Modificación de Rutinas");
         setMinimumSize(new java.awt.Dimension(800, 800));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 

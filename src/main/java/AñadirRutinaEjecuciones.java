@@ -65,6 +65,7 @@ tabla.setColumnSelectionAllowed(false); // Desactiva selección individual de co
         btn_add = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Añadir Entrenamiento");
         setMinimumSize(new java.awt.Dimension(500, 500));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 

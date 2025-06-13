@@ -61,6 +61,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         jMenuItem2.setText("jMenuItem2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("GymTracker");
         setMinimumSize(new java.awt.Dimension(500, 250));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
