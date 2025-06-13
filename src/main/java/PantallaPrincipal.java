@@ -36,17 +36,18 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         jMenuItem2 = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
-        btn_AñadirUsuario = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        btn_AñadirEjercicio = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        btn_AñadirRutina = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         btn_RutinaUsuario = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         btnModificarUsuario = new javax.swing.JMenuItem();
         btnModificarEjercicio = new javax.swing.JMenuItem();
@@ -71,19 +72,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Usuarios"));
         jPanel1.setLayout(new java.awt.GridBagLayout());
-
-        btn_AñadirUsuario.setText("Añadir");
-        btn_AñadirUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_AñadirUsuarioActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 0.25;
-        jPanel1.add(btn_AñadirUsuario, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -92,19 +80,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Ejercicios"));
         jPanel2.setLayout(new java.awt.GridBagLayout());
-
-        btn_AñadirEjercicio.setText("Añadir");
-        btn_AñadirEjercicio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_AñadirEjercicioActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 0.25;
-        jPanel2.add(btn_AñadirEjercicio, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -113,19 +88,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Rutinas"));
         jPanel3.setLayout(new java.awt.GridBagLayout());
-
-        btn_AñadirRutina.setText("Añadir");
-        btn_AñadirRutina.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_AñadirRutinaActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 0.25;
-        jPanel3.add(btn_AñadirRutina, gridBagConstraints);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
@@ -165,7 +127,40 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("jMenu2");
+        jMenu2.setText("Añadir");
+
+        jMenuItem3.setText("Usuarios");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem3);
+
+        jMenuItem4.setText("Ejercicios");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem4);
+
+        jMenuItem5.setText("Rutinas");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem5);
+
+        jMenuItem6.setText("Entrenamientos");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem6);
+
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Modificar");
@@ -281,28 +276,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_AñadirUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AñadirUsuarioActionPerformed
-        // TODO add your handling code here:
-        AñadirUsuario ver=new AñadirUsuario();
-        ver.setVisible(true);
-    }//GEN-LAST:event_btn_AñadirUsuarioActionPerformed
-
-    private void btn_AñadirEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AñadirEjercicioActionPerformed
-        // TODO add your handling code here:
-        AñadirEjercicio ver=new AñadirEjercicio();
-        ver.setVisible(true);
-    }//GEN-LAST:event_btn_AñadirEjercicioActionPerformed
-
-    private void btn_AñadirRutinaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_AñadirRutinaActionPerformed
-        // TODO add your handling code here:
-        AñadirRutina ver=new AñadirRutina();
-        ver.setVisible(true);
-    }//GEN-LAST:event_btn_AñadirRutinaActionPerformed
-
     private void btn_RutinaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_RutinaUsuarioActionPerformed
         // TODO add your handling code here:
-        AñadirRutinaEjecuciones ver=new AñadirRutinaEjecuciones();
-        ver.setVisible(true);
+        
     }//GEN-LAST:event_btn_RutinaUsuarioActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -398,6 +374,30 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         ver.setVisible(true);
     }//GEN-LAST:event_btnModificarEntrenamientoActionPerformed
 
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        AñadirUsuario ver=new AñadirUsuario();
+        ver.setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        AñadirEjercicio ver=new AñadirEjercicio();
+        ver.setVisible(true);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        AñadirRutina ver=new AñadirRutina();
+        ver.setVisible(true);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        // TODO add your handling code here:
+        AñadirRutinaEjecuciones ver=new AñadirRutinaEjecuciones();
+        ver.setVisible(true);
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -436,9 +436,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem btnVerEntrenamiento;
     private javax.swing.JMenuItem btnVerRutina;
     private javax.swing.JMenuItem btnVerUsuarios;
-    private javax.swing.JButton btn_AñadirEjercicio;
-    private javax.swing.JButton btn_AñadirRutina;
-    private javax.swing.JButton btn_AñadirUsuario;
     private javax.swing.JButton btn_RutinaUsuario;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
@@ -448,6 +445,10 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
